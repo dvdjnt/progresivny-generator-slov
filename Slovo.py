@@ -1,12 +1,17 @@
 class Slovo:
-    def __init__(self,content,rod,vzor,special=None, sklonovanie_array=None):
+    def __init__(self,content=None):
         self._content = content
-        self._rod = rod
-        self._vzor = vzor
-        self._special = special
 
+    def getContent(self):
+        return self._content
+        
     def fill_sklonovanie_array(self, array):
         self._sklonovanie_array = array
 
-    def getRod(self):
-        return self._rod
+    
+    # 1 podst m
+    # 2 prid m
+    # 3 zameno
+    # 4 sloveso
+    # 5 cislovka
+

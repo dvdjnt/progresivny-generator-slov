@@ -1,8 +1,7 @@
 import numpy as np
 import random
 import csv
-from Slovo import Slovo
-import Gramatika
+from PridavneMeno import PridavneMeno
 
 words = []
 i = 1
@@ -24,7 +23,9 @@ with open ('db.csv', mode ='r', encoding='utf-8') as file:
             # print(line[0])
             # print(line[1])
             # print(line[2])
-            obj = Slovo(content=line[0], rod=line[1], vzor=line[2])
+
+            obj = PridavneMeno(content=line[0], vzor=line[1])
+
             words.append(obj)
 
             if i == 10:
