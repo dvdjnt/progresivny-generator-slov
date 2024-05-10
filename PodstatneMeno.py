@@ -1,10 +1,20 @@
 from Slovo import Slovo
+from Gramatika import VzorInterface, CisloInterface
 
-class PodstatneMeno(Slovo):
+class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
     def __init__(self,content,rod,vzor,special=None, sklonovanie_array=None):
-        super().__init__(self,content)
+        super().__init__(content)
+        VzorInterface.__init__(self)
+        CisloInterface.__init__(self)
+
         self._rod = rod
         self._vzor = vzor
+        self._vzor_dictionary = {
+            'chlap':self.chlap,
+            'hrdina':self.hrdina,
+            'dub':self.dub,
+            'stroj':self.stroj
+        }
 
     def getRod(self):
         return self._rod
@@ -15,145 +25,44 @@ class PodstatneMeno(Slovo):
     # def changeCislo(self, cislo):
 
         
-    # def transform(self, cislo, pad)
+    def transform(self, cislo, pad):
+        method = self.getVzorMethod(self.getVzor())
+        return method(cislo, pad)
+
+    def getVzorMethod(self,vzor):
+        return self._vzor_dictionary.get(vzor)
 
     def chlap(self, cislo, pad):
+        sklonovanie_arr = ['','a','ovi','a','ovi','om',
+                       'i','ov','om','ov','och','mi']
 
-        string = self.getContent()
-        char = ''
-
-        if cislo == 'sg':
-            if pad == 'N':
-                char = ''
-            if pad == 'G':
-                char = 'a'
-            if pad == 'D':
-                char = 'ovi'
-            if pad == 'A':
-                char = 'a'
-            if pad == 'L':
-                char = 'ovi'
-            if pad == 'I':
-                char = 'om'
-        elif cislo == 'pl':
-            if pad == 'N':
-                char = 'i'
-            if pad == 'G':
-                char = 'ov'
-            if pad == 'D':
-                char = 'om'
-            if pad == 'A':
-                char = 'ov'
-            if pad == 'L':
-                char = 'och'
-            if pad == 'I':
-                char = 'mi'
-
-        return string+char
+        return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
     def hrdina(self, cislo, pad):
+        sklonovanie_arr = ['','u','ovi','u','ovi','om',
+                           'ovia','ov','om','ov','och','ami']
+        # slovo = self.getContent()[:-1]
+        # index1 = self.getCisloCode(cislo)
+        # index2 = self.getPadCode(pad)
+        # char = sklonovanie_arr[index1+index2]
+        # result = slovo+char
+        # return result
 
-        string = self.getContent()[:-1]
-        char = ''
 
-        if cislo == 'sg':
-            if pad == 'N':
-                char = ''
-            if pad == 'G':
-                char = 'u'
-            if pad == 'D':
-                char = 'ovi'
-            if pad == 'A':
-                char = 'u'
-            if pad == 'L':
-                char = 'ovi'
-            if pad == 'I':
-                char = 'om'
-        elif cislo == 'pl':
-            if pad == 'N':
-                char = 'ovia'
-            if pad == 'G':
-                char = 'ov'
-            if pad == 'D':
-                char = 'om'
-            if pad == 'A':
-                char = 'ov'
-            if pad == 'L':
-                char = 'och'
-            if pad == 'I':
-                char = 'ami'
 
-        return string+char
+        return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
     def dub(self, cislo, pad):
-
-        string = self.getContent()
-        char = ''
-
-        if cislo == 'sg':
-            if pad == 'N':
-                char = ''
-            if pad == 'G':
-                char = 'a'
-            if pad == 'D':
-                char = 'u'
-            if pad == 'A':
-                char = ''
-            if pad == 'L':
-                char = 'e'
-            if pad == 'I':
-                char = 'om'
-        elif cislo == 'pl':
-            if pad == 'N':
-                char = 'y'
-            if pad == 'G':
-                char = 'ov'
-            if pad == 'D':
-                char = 'om'
-            if pad == 'A':
-                char = 'y'
-            if pad == 'L':
-                char = 'och'
-            if pad == 'I':
-                char = 'mi'
-
-        return string+char
+        sklonovanie_arr = ['','a','u','','e','om',
+                           'y','ov','om','y','och','mi']
+        
+        return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
     def stroj(self, cislo, pad):
-
-        string = self.getContent()
-        char = ''
-
-        if cislo == 'sg':
-            if pad == 'N':
-                char = ''
-            if pad == 'G':
-                char = 'a'
-            if pad == 'D':
-                char = 'u'
-            if pad == 'A':
-                char = ''
-            if pad == 'L':
-                char = 'i'
-            if pad == 'I':
-                char = 'om'
-        elif cislo == 'pl':
-            if pad == 'N':
-                char = 'e'
-            if pad == 'G':
-                char = 'ov'
-            if pad == 'D':
-                char = 'om'
-            if pad == 'A':
-                char = 'e'
-            if pad == 'L':
-                char = 'och'
-            if pad == 'I':
-                char = 'mi'
-
-        return string+char
-
-    # so inefficient!!
+        sklonovanie_arr = ['','a','u','','i','om',
+                           'e','ov','om','e','och','mi']
+        
+        return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
 
 

@@ -1,4 +1,5 @@
 class Slovo:
+
     def __init__(self,content=None):
         self._content = content
 
@@ -8,6 +9,8 @@ class Slovo:
     def fill_sklonovanie_array(self, array):
         self._sklonovanie_array = array
     
+
+        
     # 1 podst m
     # 2 prid m
     # 3 zameno
