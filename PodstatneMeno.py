@@ -22,10 +22,10 @@ class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
             'kost':self.kost,
             # gadzina
             # idea
-            # 'mesto':self.mesto,
-            # 'srdce':self.srdce,
-            # 'vysvedcenie':self.vysvedcenie,
-            # 'dievca':self.dievca
+            'mesto':self.mesto,
+            'srdce':self.srdce,
+            'vysvedcenie':self.vysvedcenie,
+            'dievca':self.dievca
 
             # https://www.leitus.sk/podstatne-mena/
         }
@@ -78,20 +78,16 @@ class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
     def zena(self, cislo,pad):
-
-
-
-
         sklonovanie_arr = ['a','y','e','u','e','ou',
                        'y','i','am','y','ach','ami']
         
         # special case -> zien
         if pad == 'G' and cislo == 'pl':
-            slovo = list(self.getContent()[:-1])    # for using insert function
+            slovo = self.getContent()[:-1]
             char = sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)] 
-            slovo.insert(len(slovo)-2, char)
-            return ''.join(slovo)
-            return self.switchIndex(slovo, len(slovo)-3, len(slovo)-2) 
+
+            return self.insertLetterAtIndex(slovo, char, len(slovo)-2)
+            # TODO opravit hyen
 
         return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
@@ -113,6 +109,38 @@ class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
         
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
+    def mesto(self, cislo, pad):
+        sklonovanie_arr = ['o','a','u','o','e','om',
+        'a','i','am','a','ach','ami']
+        
+        # special case -> miest
+        if pad == 'G' and cislo == 'pl':
+            slovo = self.getContent()[:-1]
+            char = sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)] 
+
+            return self.insertLetterAtIndex(slovo, char, len(slovo)-3)
+        # TODO index sa moze hybat
+
+        return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+
+    def srdce(self, cislo, pad):
+        sklonovanie_arr = ['e','a','u','e','i','om',
+                'ia','','iam','ia','iach','ami']
+        
+        return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+    
+    def vysvedcenie(self, cislo, pad):
+        sklonovanie_arr = ['e','a','u','e','','m',
+                'a','','am','a','ach','ami']
+        
+        return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+
+    def dievca(self, cislo, pad):
+        sklonovanie_arr = ['','ta','tu','','ti','tom',
+                'a','t','tam','a','ach','ami']
+        
+        return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+    
     def switchIndex(self, string, indx1, indx2):
         char_list = list(string)
     
@@ -122,4 +150,7 @@ class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
         # Convert list back to string
         return ''.join(char_list)
 
-
+    def insertLetterAtIndex(self, string, letter, index):
+        string = list(string)
+        string.insert(index, letter)
+        return ''.join(string)
