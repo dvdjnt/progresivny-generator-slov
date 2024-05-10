@@ -1,5 +1,5 @@
-from Slovo import Slovo
-from Gramatika import VzorInterface, CisloInterface
+from gramatika.Slovo import Slovo
+from gramatika import VzorInterface, CisloInterface
 import array
 
 class PodstatneMeno(Slovo,VzorInterface,CisloInterface):

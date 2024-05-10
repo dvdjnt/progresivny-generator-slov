@@ -1,43 +1,37 @@
 import numpy as np
 import random
 import csv
-from PridavneMeno import PridavneMeno
-from PodstatneMeno import PodstatneMeno
+from gramatika.PridavneMeno import PridavneMeno
+from gramatika.PodstatneMeno import PodstatneMeno
 
 words = []
 i = 1
 
-meno = PodstatneMeno('Rodina','m','hrdina')
-meno.transform('sg','A')
-print(meno)
+with open ('db.csv', mode ='r', encoding='utf-8') as file:
+  csvFile = csv.reader(file)
 
+  for line in csvFile:
+        if line:  # Ensure the row isn't empty
 
+            first_line_char = line[0][0]
 
-# with open ('db.csv', mode ='r', encoding='utf-8') as file:
-#   csvFile = csv.reader(file)
+            if first_line_char == '#':
+                continue
+            if first_line_char == '\n':
+                continue
 
-#   for line in csvFile:
-#         if line:  # Ensure the row isn't empty
+            # (content), string, vzor, special
+            # print(line[0])
+            # print(line[1])
+            # print(line[2])
 
-#             first_line_char = line[0][0]
+            obj = PridavneMeno(content=line[0], vzor=line[1])
 
-#             if first_line_char == '#':
-#                 continue
-#             if first_line_char == '\n':
-#                 continue
+            words.append(obj)
 
-#             # (content), string, vzor, special
-#             # print(line[0])
-#             # print(line[1])
-#             # print(line[2])
+            if i == 10:
+                break
+            i+=1
 
-#             obj = PridavneMeno(content=line[0], vzor=line[1])
-
-#             words.append(obj)
-
-#             if i == 10:
-#                 break
-#             i+=1
-
-# print(len(words))
+print(len(words))
 

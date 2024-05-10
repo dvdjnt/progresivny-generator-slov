@@ -1,4 +1,4 @@
-from Slovo import Slovo
+from gramatika.Slovo import Slovo
 
 class Sloveso(Slovo):
     def __init__(self,content):

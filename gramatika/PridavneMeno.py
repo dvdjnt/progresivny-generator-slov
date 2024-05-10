@@ -1,4 +1,4 @@
-from Slovo import Slovo
+from gramatika.Slovo import Slovo
 
 class PridavneMeno(Slovo):
     def __init__(self,content,vzor,special=None, sklonovanie_array=None):
