@@ -33,11 +33,14 @@ class PridavneMeno(Slovo):
                 char = 'e'
         elif cislo == 'pl':
             if rod == 'm':
-                char = ''
+                char = 'i'
             if rod == 'z':
                 char = 'e'
             if rod == 's':
                 char = 'e'
+
+
+        
         
         return string+char
     
@@ -61,3 +64,32 @@ class PridavneMeno(Slovo):
 
 
         return string+char
+    
+    # def case_default():
+    #     return 0
+
+    # def switch_pekny_sg(self, case):
+    #     return {
+    #         'm':self.add_nothing,
+    #         'z':self.add_a,
+    #         's':self.add_e
+    #     }.get(case, self.case_default)()
+    
+    # def switch_pekny_pl(self, case):
+    #     return {
+    #         'm':self.add_i,
+    #         'z':self.add_e,
+    #         's':self.add_e
+    #     }.get(case, self.case_default)()
+    
+
+    # def add_a():
+    #     return 'a'
+    # def add_e():
+    #     return 'e'
+    # def add_i():
+    #     return 'i'
+    # def add_nothing():
+    #     return
+    # def case_default():
+    #     return 0
