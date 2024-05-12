@@ -1,11 +1,12 @@
 # from gramatika.Slovo import Slovo
 
 class Sloveso():
-    def __init__(self,content_m,content_p,content_b):
+    def __init__(self,content_m,content_p,content_b,pad):
         # super().__init__(content)
         self._content_m=content_m
         self._content_p=content_p
         self._content_b=content_b
+        self._pad=pad
         self._cas_dict = {
             'minuly':self.minuly,
             'pritomny':self.pritomny,
@@ -20,6 +21,9 @@ class Sloveso():
     def getCasMethod(self,cas):
         return self._cas_dict.get(cas)
     
+    def getPad(self):
+        return self._pad
+
     def getContent(self):
         return self._content_p
     

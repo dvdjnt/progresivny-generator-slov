@@ -26,7 +26,8 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
             'srdce':self.srdce,
             'vysvedcenie':self.vysvedcenie,
             'dievca':self.dievca,
-            'nesklonne':self.nesklonne
+            'nesklonne':self.nesklonne,
+            'otcov':self.otcov
 
             # https://www.leitus.sk/podstatne-mena/
         }
@@ -136,6 +137,26 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
     def nesklonne(self, cislo, pad):
         return self.getContent()
 
+    def otcov(self, cislo, pad):
+        # TODO nezivotne
+        sklonovanie_arr_m = ['','ho','mu','ho','om','ym',
+                            'i','ych','ym','ych','ych','ymi']
+        
+        sklonovanie_arr_z = ['a','ej','ej','u','ej','ou',
+                            'e','ych','ym','e','ych','ymi']
+        
+        sklonovanie_arr_s = ['o','ho','mu','o','om','ym',
+                            'e','ych','ym','e','ych','ymi']
+        
+        rod_array_dict = {
+            'm':sklonovanie_arr_m,
+            'z':sklonovanie_arr_z,
+            's':sklonovanie_arr_s
+        }
+
+        arr = rod_array_dict.get(self.getRod())
+        return self.getContent()+arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+    
     def switchIndex(self, string, indx1, indx2):
         char_list = list(string)
     

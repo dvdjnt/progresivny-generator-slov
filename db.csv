@@ -1,7 +1,7 @@
 #podstatne mena
 oportunista,m,hrdina
 heger,m,chlap
-soros,m,chlapa
+soros,m,chlap
 brusel,m,hrdina
 slnieckar,m,chlap
 sulik,m,chlap
@@ -56,7 +56,7 @@ farizejsky,pekny
 mocensky,pekny
 progresivny,pekny
 matovicov,otcov
-caputova,otcov
+caputovej,nesklonne
 hegerov,otcov
 korcokov,otcov
 infantilny,pekny
@@ -64,25 +64,25 @@ infantilny,pekny
 #zamena
 
 #slovesa
-chcel,chce,chciet
-musel,musi,musiet
-nesmel,nesmie,nebude
-mohol,moze,moct
+chcel,chce,chciet,A
+musel,musi,musiet,N
+nesmel,nesmie,nebude,N
+mohol,moze,moct,N
+je,bol,bude,N
 
-je,bol,bude
-znicil,nici,nicit
-terorizoval,terorizuje,terorizovat
-zmenil,meni,menit
-zakazal,zakazuje,zakaze
-zavadzal,zavadza,zavadzat
-kradol,kradne,ukradne
-skodil,skodi,skodit
-rozkradol,kradne,ukradne
-sterilizoval,sterilizuje,sterilizovat
-pretlacil,tlaci,tlacit
-sa prizivoval,sa prizivuje,sa prizivovat
-za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci
-opovrhoval,opovrhuje,opovrhovat
+znicil,nici,nicit,A
+terorizoval,terorizuje,terorizovat,A
+zmenil,meni,menit,G
+zakazal,zakazuje,zakaze,A
+zavadzal,zavadza,zavadzat,A
+kradol,kradne,ukradne,A
+skodil,skodi,skodit,D
+rozkradol,kradne,ukradne,A
+sterilizoval,sterilizuje,sterilizovat,A
+pretlacil,tlaci na,tlacit na,G
+sa prizivoval,sa prizivuje,sa prizivovat,L
+za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,A
+opovrhoval,opovrhuje,opovrhovat,I
 
 
 #predlozka

@@ -53,8 +53,6 @@ class GeneratorViet:
 
         self._template_arr = [141, 21421, 2141] # word blocks based on _sd_enum
         
-
-
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
         return self._template_arr[random_index]
@@ -99,7 +97,7 @@ class GeneratorViet:
                             self._pridavne.append(obj)
 
                         if (sd_string == 'sloveso'):
-                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2])
+                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2],pad=line[3])
                             self._slovesa.append(obj)
 
                         # words.append(obj)
@@ -108,35 +106,20 @@ class GeneratorViet:
                             break
                         i+=1
 
-        # print(len(podstatne))
-        # print(len(pridavne))
-        # print(len(slovesa))
-
-        # for word in words:
-        #     print(word.getContent())
-        #     print(word.getRod())
-        #     print(word.getVzor())
-        #     print()
 
     def generateSentence(self):
         template = str(self.getSentenceTemplate())
         print(f'sentence template: {template}\n')
         sentence = ''
 
-        # for i in range(0, len(template)):
-        #     index = int(template[i])
-        #     word = self.getWord(index)
-        #     sentence = sentence + word + ' '
-
-        # return sentence
-
-
         podmet = self.generatePodmet()
-        podmetBlock1 = self.generatePodmetBlock(podmet)
-        prisudokBlock = self.generatePrisudokBlock(podmet)
-        podmetBlock2 = self.generatePodmetBlock(podmet)
+        prisudok = self.generatePrisudok()
 
-        return podmetBlock1 + prisudokBlock + podmetBlock2
+        podmetBlock = self.generatePodmetBlock(podmet)
+        prisudokBlock = self.generatePrisudokBlock(prisudok, podmet)
+        predmetBlock = self.generatePredmetBlock(prisudok.getPad())
+
+        return podmetBlock + prisudokBlock + predmetBlock
 
     def getRandomWord(self, data):
         wordtype = data
@@ -148,7 +131,7 @@ class GeneratorViet:
         
         array = self._sd_arrays.get(wordtype)   # get array of words by type
         random_index = random.randint(0,len(array)-1)
-        return array[random_index].getContent()
+        return array[random_index]
     
     def generatePodmetBlock(self, podmet):
         block = ''
@@ -156,29 +139,24 @@ class GeneratorViet:
         podmet_rod = podmet.getRod()
 
         # random number of privlastky
-        random_privlastky_number = random.randint(2,3) # TODO 0,3
+        random_privlastky_number = random.randint(0,3)
 
         for i in range(0, random_privlastky_number):
-            random_pridavne_index = random.randint(0,len(self._pridavne)-1) 
-            privlastok = self._pridavne[random_pridavne_index]
+            privlastok = self.getRandomWord('pridavne')
             privlastok_trans = privlastok.transform(podmet_rod, 'sg','N')
             block = block + privlastok_trans + ' '
 
         block = block + podmet.getContent() + ' '
         return block
     
-    def generatePrisudokBlock(self, podmet):
+    def generatePrisudokBlock(self, sloveso, podmet):
         block = ''
         
         # sloveso_vzor = podmet.getVzor() # TODO add pad for next block
-        # TODO pouzit getRandomWord
 
         random_number = random.randint(1,2) # number of words 
 
         for i in range(0, random_number):
-            # get random prisudok word
-            random_index = random.randint(0,len(self._slovesa)-1) 
-            sloveso = self._slovesa[random_index]
             sloveso_trans = sloveso.transform('pritomny',podmet.getRod(), 'sg')
             block = block + sloveso_trans + ' '
 
@@ -189,12 +167,32 @@ class GeneratorViet:
 
         return block
 
-    def generatePodmet(self):
-        # get random podmet word
-        random_index = random.randint(0,len(self._podstatne)-1) 
-        podmet = self._podstatne[random_index]
+    def generatePredmetBlock(self, predmet_pad):
+        block = ''
 
-        return podmet
+        predmet = self.getRandomWord('podstatne')
+        print(predmet.getContent())
+        print(predmet.getVzor())
+        print(predmet_pad)
+
+        # random number of privlastky
+        random_privlastky_number = random.randint(0,3)
+
+        for i in range(0, random_privlastky_number):
+            privlastok = self.getRandomWord('pridavne')
+            privlastok_trans = privlastok.transform(predmet.getRod(), 'sg',predmet_pad)
+            block = block + privlastok_trans + ' '
+
+        predmet_trans = predmet.transform('sg',predmet_pad)
+        block = block + predmet_trans + ' '
+
+        return block
+
+    def generatePodmet(self):
+        return self.getRandomWord('podstatne')
     
+    def generatePrisudok(self):
+        return self.getRandomWord('sloveso')
+
     def chance(self, threshold):
         return random.random() < threshold
