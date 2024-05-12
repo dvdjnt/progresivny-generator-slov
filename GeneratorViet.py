@@ -51,14 +51,12 @@ class GeneratorViet:
             'citoslovcia':10
         }
 
-        self._template_arr = [141, 21421, 2141]
+        self._template_arr = [141, 21421, 2141] # word blocks based on _sd_enum
         
 
 
     def getSentenceTemplate(self):
-        print('dlzka pola:'+str(len(self._template_arr)))
         random_index = random.randint(0,len(self._template_arr)-1)
-        print('index:'+str(random_index))
         return self._template_arr[random_index]
     
     def loadDB(self):
@@ -122,14 +120,13 @@ class GeneratorViet:
 
     def generateSentence(self):
         template = str(self.getSentenceTemplate())
-        print(template)
+        print(f'sentence template: {template}\n')
         sentence = ''
 
         for i in range(0, len(template)):
             index = int(template[i])
             word = self.getWord(index)
-            sentence = sentence + word
-            sentence = sentence + ' '
+            sentence = sentence + word + ' '
 
         return sentence
 
@@ -144,3 +141,23 @@ class GeneratorViet:
         array = self._sd_arrays.get(wordtype)   # get array of words by type
         random_index = random.randint(0,len(array)-1)
         return array[random_index].getContent()
+    
+    def generatePodmetBlock(self):
+        block = ''
+
+        # get random podmet word
+        random_index = random.randint(0,len(self._podstatne)-1) 
+        podmet = self._podstatne[random_index]
+        podmet_rod = podmet.getRod()
+
+        # random number of privlastky
+        random_privlastky_number = random.randint(0,3)
+
+        for i in range(0, random_privlastky_number):
+            random_pridavne_index = random.randint(0,len(self._pridavne)-1) 
+            privlastok = self._pridavne[random_pridavne_index]
+            privlastok_transformed = privlastok.transform('sg', podmet_rod)
+            block = block + privlastok_transformed + ' '
+
+        block = block + podmet.getContent()
+        return block
