@@ -12,11 +12,11 @@ class GeneratorViet:
     def __init__(self):
         self._slovne_druhy_enum = [ 
             'null',
-            'podstatne',
-            'pridavne',
-            'zameno',
-            'sloveso',
-            'cislovka',
+            'podstatne',    # 1
+            'pridavne',     # 2
+            'zameno',       # 3
+            'sloveso',      # 4
+            'cislovka',     # 5
             'prislovka',
             'predlozka',
             'spojka',
@@ -36,18 +36,22 @@ class GeneratorViet:
             'citoslovcia':10
         }
 
-        self._template_arr = [141]
+        self._template_arr = [141, 21421, 2141]
+        
+        self.loadDB()
 
     def getSentenceTemplate(self):
-        random_index = random.randint(0,len(self._template_arr))
+        print('dlzka pola:'+str(len(self._template_arr)))
+        random_index = random.randint(0,len(self._template_arr)-1)
+        print('index:'+str(random_index))
         return self._template_arr[random_index]
     
     def loadDB(self):
         
         words = []
-        podstatne = []
-        pridavne = []
-        slovesa = []
+        self._podstatne = []
+        self._pridavne = []
+        self._slovesa = []
 
         i = 1
         enum_counter = 0 # used for correct class creation according to _slovne_druhy_enum
@@ -61,7 +65,6 @@ class GeneratorViet:
                         first_line_char = line[0][0]
 
                         if first_line_char == '#':
-                            print('enum counter: '+str(enum_counter))
                             enum_counter+=1  # skips line
                             continue
                         if first_line_char == '\n':
@@ -76,16 +79,15 @@ class GeneratorViet:
                         # call method - create new object 
                         if (sd_string == 'podstatne'):
                             obj = method(content=line[0], rod=line[1], vzor=line[2])
-                            podstatne.append(obj)
+                            self._podstatne.append(obj)
                         
                         if (sd_string == 'pridavne'):
                             obj = method(content=line[0], vzor=line[1])
-                            pridavne.append(obj)
+                            self._pridavne.append(obj)
 
                         if (sd_string == 'sloveso'):
                             obj = method(content=line[0])
-                            print(obj.getContent())
-                            slovesa.append(obj)
+                            self._slovesa.append(obj)
 
                         # words.append(obj)
 
@@ -93,9 +95,9 @@ class GeneratorViet:
                             break
                         i+=1
 
-        print(len(podstatne))
-        print(len(pridavne))
-        print(len(slovesa))
+        # print(len(podstatne))
+        # print(len(pridavne))
+        # print(len(slovesa))
 
         # for word in words:
         #     print(word.getContent())
@@ -103,3 +105,15 @@ class GeneratorViet:
         #     print(word.getVzor())
         #     print()
 
+    # def generateSentence(self):
+    #     template = self.getSentenceTemplate()
+    #     string = ''
+
+        
+    #     for i in range(0, len(template)):
+    #         sd_type = self._slovne_druhy_enum[i]
+            
+    #         string.join(self.)
+
+    # def getWord(self, type):
+    #     random_index = random.randint(0,len(self._)-1)
