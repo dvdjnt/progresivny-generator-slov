@@ -113,20 +113,25 @@ class GeneratorViet:
                             break
                         i+=1
 
+    def generateSentence(self, amount):
 
-    def generateSentence(self):
+
         template = str(self.getSentenceTemplate())
         print(f'sentence template: {template}\n')
         sentence = ''
         # TODO add template
-        podmet = self.getPodmet()
-        prisudok = self.getPrisudok()
 
-        podmetBlock = self.generatePodmetBlock(podmet)
-        prisudokBlock = self.generatePrisudokBlock(prisudok, podmet)
-        predmetBlock = self.generatePredmetBlock(prisudok.getPad())
 
-        return podmetBlock + prisudokBlock + predmetBlock
+        for i in range(0, amount):
+            podmet = self.getPodmet()
+            prisudok = self.getPrisudok()
+
+            podmetBlock = self.generatePodmetBlock(podmet)
+            prisudokBlock = self.generatePrisudokBlock(prisudok, podmet)
+            predmetBlock = self.generatePredmetBlock(prisudok.getPad())
+            sentence = sentence + podmetBlock + prisudokBlock + predmetBlock + '...'
+
+        return sentence
 
     def getRandomWord(self, data):
         wordtype = data
@@ -150,24 +155,42 @@ class GeneratorViet:
     def generatePrisudokBlock(self, sloveso, podmet):
         block = ''
 
-        prisudky_amount = random.randint(1,2) # number of words 
+        prisudky_amount = 1
+        if self.chance(0.3):
+            prisudky_amount+= 1
+
         # TODO random cas
         cas = 'pritomny'
+        rod = podmet.getRod()
+        cislo = 'sg'
 
         for i in range(0, prisudky_amount):
+
+
+
+            # modal chance
             if self.chance(0.7):
-                block = block + self.getRandomWord('sloveso_modal').transform(cas, podmet.getRod(), 'sg') + ' ' + sloveso.transform('neurcity',podmet.getRod(),'sg') + ' '
+                prisudok = self.getModalBlock(cas, rod, cislo, sloveso)
+                cas = 'neurcity'
+                block = block + prisudok
             else:
-                sloveso_trans = sloveso.transform(cas,podmet.getRod(), 'sg')
+                sloveso_trans = sloveso.transform(cas, rod, cislo)
                 block = block + sloveso_trans + ' '
 
-            if prisudky_amount > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
-                block = block + 'a '
-                # block = block.replace(' ',' a ',1)
-                # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
+                # if prisudky_amount > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
+                #     block = block + 'a '
+                #     # block = block.replace(' ',' a ',1)
+                #     # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
+
+
+
 
 
         return block
+    
+    def getModalBlock(self, cas, rod, cislo, sloveso):
+        return self.getRandomWord('sloveso_modal').transform(cas, rod, cislo) + ' ' #+ sloveso.transform('neurcity',rod,cislo) + ' '
+
 
     def generatePredmetBlock(self, predmet_pad):
         block = ''
