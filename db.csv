@@ -1,0 +1,166 @@
+#podstatne mena
+oportunista,m,hrdina
+heger,m,chlap
+soros,m,chlap
+brusel,m,hrdina
+slnieckar,m,chlap
+sulik,m,chlap
+progresivec,m,chlap
+matovic,m,chlap
+satanista,m,hrdina
+fasista,m,hrdina
+lipsic,m,chlap
+korcok,m,chlap
+dennik n,m,nesklonne
+kapitalista,m,hrdina
+zidojaster,m,chlap
+naď,m,chlap
+potkan,m,chlap
+simecka,m,hrdina
+liberalizmus,m,hrdina
+fasizmus,m,hrdina
+farizej,m,chlap
+oligarcha,m,hrdina
+psychopat,m,chlap
+covid,m,hrdina
+hrdina,m,hrdina
+saso,m,chlap
+vrchol,m,hrdina
+rozklad,m,hrdina
+pokus,m,hrdina
+propagandista,m,hrdina
+
+europska unia,z,ulica
+markiza,z,zena
+SASka,z,zena
+vlada,z,zena
+nadvlada,z,zena
+caputova,z,otcov
+mimovladka,z,zena
+propaganda,z,zena
+elita,z,zena
+bratislavska kaviaren,z,dlan
+hyena,z,zena
+pandemia,z,ulica
+siet,z,ulica
+korupcia,z,ulica
+rozum,m,hrdina
+
+PSko,s,mesto
+hniezdo,s,mesto
+centrum,s,mesto
+pohlavie,s,vysvedcenie
+OLANO,s,mesto
+prostredie,s,vysvedcenie
+
+aktuality,z,nesklonne
+72 pohlavi,s,nesklonne
+poradcovia caputovej,m,nesklonne
+
+#pridavne mena (male)
+liberalny,pekny
+opozicno-oportunisticky,pekny
+opozicny,pekny
+bratislavsky,pekny
+fasisticky,pekny
+dalsi,cudzi
+farizejsky,pekny
+mocensky,pekny
+progresivny,pekny
+matovicov,otcov
+caputovej,nesklonne
+hegerov,otcov
+korcokov,otcov
+infantilny,pekny
+koalicny,pekny
+pandemicky,pekny
+sorosovsky,pekny
+medzinarodny,pekny
+absolutny,pekny
+LGBT,nesklonne
+zvrateny,pekny
+zdravy,pekny
+opacny,pekny
+
+#zamena
+
+#slovesa
+je,bol,bude,byt,neplno,N
+mal,ma,mat,mat,neplno,A
+
+chcel,chce,chciet,chciet,modal,A
+musel,musi,musiet,musiet,modal,N
+smel,smie,smiet,smiet,modal,N
+mohol,moze,moct,moct,modal,N
+prestal,prestava,prestane,prestat,modal,A
+zacal,zacina,zacne,zacat,modal,A
+prestal,prestava,prestane,prestat,modal,A
+dal,dava,da,dat,modal,A
+snazil,snazi,snazit,snazit,modal,A
+
+znicil,nici,nicit,nicit,plne,A
+terorizoval,terorizuje,terorizovat,terorizovat,plne,A
+zmenil,meni,menit,menit,plne,G
+zakazal,zakazuje,zakaze,zakazat,plne,A
+zavadzal,zavadza,zavadzat,zavadzat,plne,A
+kradol,kradne,ukradne,ukradnut,plne,A
+skodil,skodi,skodit,skodit,plne,D
+rozkradol,kradne,ukradne,ukradnut,plne,A
+sterilizoval,sterilizuje,sterilizovat,sterilizovat,plne,A
+pretlacil,tlaci na,tlacit na,tlacit,plne,G
+sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat,plne,L
+za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,oznacovat za dezolata,plne,A
+opovrhoval,opovrhuje,opovrhovat,opovrhovat,plne,I
+robil,robi,robit,robit,plne,A
+rubal,rube,rubat,rubat,plne,A
+podporil,podporuje,podpori,podporit,plne,A
+podsuval,podsuva,podsunie,podsuvat,plne,A
+dovolil,dovoluje,dovoli,dovolit,plne,A
+
+
+#predlozka
+na
+pred
+
+
+#prislovky
+pomaly
+rychlo
+v skratenom legislativnom konani
+v zaujme ludu
+netransparentne
+alibisticky
+nekalo
+falosne
+nezakonne
+opakovane
+prostrednictvom
+v rozpore
+normalne
+nikdy
+fasisticky
+farizejsky
+bezhlavo
+bez problemov
+
+
+
+#spojky
+
+#castice
+
+
+
+
+
+
+
+
+
+
+napriklad
+a
+podla obrazu
+podla
+ale aj
+ako
