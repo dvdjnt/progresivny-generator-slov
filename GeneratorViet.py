@@ -10,7 +10,7 @@ from gramatika.Sloveso import Sloveso
 
 class GeneratorViet:
     def __init__(self):
-        self._slovne_druhy_enum = [ 
+        self._sd_enum = [ 
             'null',
             'podstatne',    # 1
             'pridavne',     # 2
@@ -23,7 +23,7 @@ class GeneratorViet:
             'castica',
             'citoslovcia']
         
-        self._slovne_druhy_methods = {
+        self._sd_methods = {
             'podstatne':PodstatneMeno,
             'pridavne':PridavneMeno,
             'zameno':3,
@@ -36,9 +36,24 @@ class GeneratorViet:
             'citoslovcia':10
         }
 
+        self.loadDB()
+        
+        self._sd_arrays = {
+            'podstatne':self._podstatne,
+            'pridavne':self._pridavne,
+            'zameno':3,
+            'sloveso':self._slovesa,
+            'cislovka':5,
+            'prislovka':6,
+            'predlozka':7,
+            'spojka':8,
+            'castica':9,
+            'citoslovcia':10
+        }
+
         self._template_arr = [141, 21421, 2141]
         
-        self.loadDB()
+
 
     def getSentenceTemplate(self):
         print('dlzka pola:'+str(len(self._template_arr)))
@@ -54,7 +69,7 @@ class GeneratorViet:
         self._slovesa = []
 
         i = 1
-        enum_counter = 0 # used for correct class creation according to _slovne_druhy_enum
+        enum_counter = 0 # used for correct class creation according to _sd_enum
 
         with open ('db.csv', mode ='r', encoding='utf-8') as file:
             csvFile = csv.reader(file)
@@ -71,10 +86,10 @@ class GeneratorViet:
                             continue
 
                         # access string from array through index 
-                        sd_string = self._slovne_druhy_enum[enum_counter]
+                        sd_string = self._sd_enum[enum_counter]
 
                         # access method (slovny druh constructor) through dictionary
-                        method = self._slovne_druhy_methods.get(sd_string)
+                        method = self._sd_methods.get(sd_string)
 
                         # call method - create new object 
                         if (sd_string == 'podstatne'):
@@ -111,9 +126,12 @@ class GeneratorViet:
 
         
     #     for i in range(0, len(template)):
-    #         sd_type = self._slovne_druhy_enum[i]
+    #         sd_type = self._sd_enum[i]
             
     #         string.join(self.)
 
-    # def getWord(self, type):
-    #     random_index = random.randint(0,len(self._)-1)
+    def getWord(self, type_int):
+        wordtype = self._sd_enum[type_int] 
+        array = self._sd_arrays.get(wordtype)   # get array of words by type
+        random_index = random.randint(0,len(array)-1)
+        return array[random_index].getContent()
