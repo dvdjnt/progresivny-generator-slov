@@ -151,12 +151,12 @@ class GeneratorViet:
         podmet_rod = podmet.getRod()
 
         # random number of privlastky
-        random_privlastky_number = random.randint(0,3)
+        random_privlastky_number = random.randint(2,3) # TODO 0,3
 
         for i in range(0, random_privlastky_number):
             random_pridavne_index = random.randint(0,len(self._pridavne)-1) 
             privlastok = self._pridavne[random_pridavne_index]
-            privlastok_transformed = privlastok.transform('sg', podmet_rod)
+            privlastok_transformed = privlastok.transform(podmet_rod, 'sg','N')
             block = block + privlastok_transformed + ' '
 
         block = block + podmet.getContent()

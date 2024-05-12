@@ -1,95 +1,91 @@
 from gramatika.Slovo import Slovo
+from gramatika.VzorInterface import VzorInterface
+from gramatika.CisloInterface import CisloInterface
 
-class PridavneMeno(Slovo):
+class PridavneMeno(Slovo,VzorInterface, CisloInterface):
     def __init__(self,content,vzor,special=None, sklonovanie_array=None):
         super().__init__(content)
+        VzorInterface.__init__(self)
+        CisloInterface.__init__(self)
+
         self._vzor = vzor
+        self._vzor_dictionary = {
+            'pekny':self.pekny,
+            'cudzi':self.cudzi,
+            'otcov':self.otcov
+
+            # https://www.leitus.sk/pridavne-mena/
+        }
     
     def getVzor(self):
         return self._vzor
 
-    def transform(self, rod, cislo):
-        vzor = self.getVzor()
+    def transform(self, rod, cislo, pad):
         slovo = self.getContent()
 
-        if vzor == 'pekny':
-            return self.pekny(rod, cislo)
-        elif vzor == 'cudzi':
-            return self.cudzi(rod, cislo)
-        else:
-            return 0
+        method = self.getVzorMethod(self.getVzor())
+        return method(rod, cislo, pad)
             
-    def pekny(self, rod, cislo):
+    def getVzorMethod(self, vzor):
+        return self._vzor_dictionary.get(vzor)
+    
+    def pekny(self, rod, cislo, pad):
 
-        string = self.getContent()[:-1]
-        char = ''
-
-        if cislo == 'sg':
-            if rod == 'm':
-                char = ''
-            if rod == 'z':
-                char = 'a'
-            if rod == 's':
-                char = 'e'
-        elif cislo == 'pl':
-            if rod == 'm':
-                char = 'i'
-            if rod == 'z':
-                char = 'e'
-            if rod == 's':
-                char = 'e'
-
-
+        # TODO nezivotne
+        sklonovanie_arr_m = ['y','eho','emu','eho','om','ym',
+                            'i','ych','ych','ych','ych','ymi']
         
+        sklonovanie_arr_z = ['a','ej','ej','u','ej','ou',
+                            'e','ych','ym','e','ych','ymi']
         
-        return string+char
-    
-    def cudzi(self, rod, cislo):
+        sklonovanie_arr_s = ['e','eho','emu','e','om','ym',
+                            'e','ych','ym','e','ych','ymi']
         
-        string = self.getContent()
-        char = ''
+        rod_array_dict = {
+            'm':sklonovanie_arr_m,
+            'z':sklonovanie_arr_z,
+            's':sklonovanie_arr_s
+        }
 
-        if cislo == 'sg':
-            if rod == 'm':
-                char = ''
-            if rod == 'z':
-                char = 'a'
-            if rod == 's':
-                char = 'e'
-        elif cislo == 'pl':
-            if rod == 'm':
-                char = 'i'
-            else:
-                char = 'e'
-
-
-        return string+char
+        arr = rod_array_dict.get(rod)
+        return self.getContent()[:-1]+arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
-    # def case_default():
-    #     return 0
+    def cudzi(self, rod, cislo, pad):
+        # TODO nezivotne
+        sklonovanie_arr_m = ['i','ieho','iemu','ieho','om','im',
+                            'i','ich','im','ich','ich','imi']
+        
+        sklonovanie_arr_z = ['ia','ej','ej','iu','ej','ou',
+                            'ie','ich','im','ie','ich','imi']
+        
+        sklonovanie_arr_s = ['ie','ieho','iemu','ie','om','im',
+                            'ie','ich','im','ie','ich','imi']
+        
+        rod_array_dict = {
+            'm':sklonovanie_arr_m,
+            'z':sklonovanie_arr_z,
+            's':sklonovanie_arr_s
+        }
 
-    # def switch_pekny_sg(self, case):
-    #     return {
-    #         'm':self.add_nothing,
-    #         'z':self.add_a,
-    #         's':self.add_e
-    #     }.get(case, self.case_default)()
+        arr = rod_array_dict.get(rod)
+        return self.getContent()[:-1]+arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
-    # def switch_pekny_pl(self, case):
-    #     return {
-    #         'm':self.add_i,
-    #         'z':self.add_e,
-    #         's':self.add_e
-    #     }.get(case, self.case_default)()
-    
+    def otcov(self, rod, cislo, pad):
+        # TODO nezivotne
+        sklonovanie_arr_m = ['','ho','mu','ho','om','ym',
+                            'i','ych','ym','ych','ych','ymi']
+        
+        sklonovanie_arr_z = ['a','ej','ej','u','ej','ou',
+                            'e','ych','ym','e','ych','ymi']
+        
+        sklonovanie_arr_s = ['o','ho','mu','o','om','ym',
+                            'e','ych','ym','e','ych','ymi']
+        
+        rod_array_dict = {
+            'm':sklonovanie_arr_m,
+            'z':sklonovanie_arr_z,
+            's':sklonovanie_arr_s
+        }
 
-    # def add_a():
-    #     return 'a'
-    # def add_e():
-    #     return 'e'
-    # def add_i():
-    #     return 'i'
-    # def add_nothing():
-    #     return
-    # def case_default():
-    #     return 0
+        arr = rod_array_dict.get(rod)
+        return self.getContent()+arr[self.getCisloCode(cislo)+self.getPadCode(pad)]

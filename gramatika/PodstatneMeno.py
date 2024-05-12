@@ -1,13 +1,12 @@
 from gramatika.Slovo import Slovo
 from gramatika.VzorInterface import VzorInterface
 from gramatika.CisloInterface import CisloInterface
-import array
 
-class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
+class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
     def __init__(self,content,rod,vzor,special=None, sklonovanie_array=None):
         super().__init__(content)
-        # VzorInterface.__init__(self)
-        # CisloInterface.__init__(self)
+        VzorInterface.__init__(self)
+        CisloInterface.__init__(self)
 
         self._rod = rod
         self._vzor = vzor
@@ -55,15 +54,6 @@ class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
     def hrdina(self, cislo, pad):
         sklonovanie_arr = ['','u','ovi','u','ovi','om',
                            'ovia','ov','om','ov','och','ami']
-        # slovo = self.getContent()[:-1]
-        # index1 = self.getCisloCode(cislo)
-        # index2 = self.getPadCode(pad)
-        # char = sklonovanie_arr[index1+index2]
-        # result = slovo+char
-        # return result
-
-
-
         return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
     def dub(self, cislo, pad):
