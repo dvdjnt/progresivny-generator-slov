@@ -21,6 +21,7 @@ liberalizmus,m,hrdina
 fasizmus,m,hrdina
 farizej,m,chlap
 oligarcha,m,hrdina
+psychopat,m,chlap
 
 europska unia,z,ulica
 markiza,z,zena
@@ -59,6 +60,8 @@ caputova,otcova
 hegerov,otcov
 korcokov,otcov
 infantilny,pekny
+
+#zamena
 
 #slovesa
 chciet

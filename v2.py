@@ -1,37 +1,10 @@
 import numpy as np
 import random
 import csv
-from gramatika.PridavneMeno import PridavneMeno
-from gramatika.PodstatneMeno import PodstatneMeno
+from GeneratorViet import GeneratorViet
 
-words = []
-i = 1
+gen = GeneratorViet()
+gen.loadDB()
 
-with open ('db.csv', mode ='r', encoding='utf-8') as file:
-  csvFile = csv.reader(file)
-
-  for line in csvFile:
-        if line:  # Ensure the row isn't empty
-
-            first_line_char = line[0][0]
-
-            if first_line_char == '#':
-                continue
-            if first_line_char == '\n':
-                continue
-
-            # (content), string, vzor, special
-            # print(line[0])
-            # print(line[1])
-            # print(line[2])
-
-            obj = PridavneMeno(content=line[0], vzor=line[1])
-
-            words.append(obj)
-
-            if i == 10:
-                break
-            i+=1
-
-print(len(words))
+# print(len(words))
 

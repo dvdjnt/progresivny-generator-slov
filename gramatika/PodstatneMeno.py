@@ -1,12 +1,13 @@
 from gramatika.Slovo import Slovo
-from gramatika import VzorInterface, CisloInterface
+from gramatika.VzorInterface import VzorInterface
+from gramatika.CisloInterface import CisloInterface
 import array
 
 class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
     def __init__(self,content,rod,vzor,special=None, sklonovanie_array=None):
         super().__init__(content)
-        VzorInterface.__init__(self)
-        CisloInterface.__init__(self)
+        # VzorInterface.__init__(self)
+        # CisloInterface.__init__(self)
 
         self._rod = rod
         self._vzor = vzor
@@ -20,7 +21,7 @@ class PodstatneMeno(Slovo,VzorInterface,CisloInterface):
             'ulica':self.ulica,
             'dlan':self.dlan,
             'kost':self.kost,
-            # gadzina
+            # gazdina
             # idea
             'mesto':self.mesto,
             'srdce':self.srdce,
