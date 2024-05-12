@@ -11,7 +11,7 @@ satanista,m,hrdina
 fasista,m,hrdina
 lipsic,m,chlap
 korcok,m,chlap
-dennik n,m,*
+dennik n,m,nesklonne
 kapitalista,m,hrdina
 zidojaster,m,chlap
 naď,m,chlap
@@ -28,7 +28,7 @@ markiza,z,zena
 SASka,z,zena
 vlada,z,zena
 nadvlada,z,zena
-caputova,z,*
+caputova,z,otcov
 mimovladka,z,zena
 propaganda,z,zena
 elita,z,zena
@@ -42,9 +42,9 @@ pohlavie,s,vysvedcenie
 OLANO,s,mesto
 
 
-aktuality,pl,*
-72 pohlavi,pl,*
-poradcovia caputovej,pl,*
+aktuality,z,nesklonne
+72 pohlavi,s,nesklonne
+poradcovia caputovej,m,nesklonne
 
 #pridavne mena (male)
 liberalny,pekny
@@ -56,7 +56,7 @@ farizejsky,pekny
 mocensky,pekny
 progresivny,pekny
 matovicov,otcov
-caputova,otcova
+caputova,nesklonne
 hegerov,otcov
 korcokov,otcov
 infantilny,pekny

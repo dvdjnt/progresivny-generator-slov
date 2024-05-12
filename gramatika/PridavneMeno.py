@@ -12,7 +12,8 @@ class PridavneMeno(Slovo,VzorInterface, CisloInterface):
         self._vzor_dictionary = {
             'pekny':self.pekny,
             'cudzi':self.cudzi,
-            'otcov':self.otcov
+            'otcov':self.otcov,
+            'nesklonne':self.nesklonne
 
             # https://www.leitus.sk/pridavne-mena/
         }
@@ -30,8 +31,7 @@ class PridavneMeno(Slovo,VzorInterface, CisloInterface):
         return self._vzor_dictionary.get(vzor)
     
     def pekny(self, rod, cislo, pad):
-
-        # TODO nezivotne
+        # TODO nezivotne    
         sklonovanie_arr_m = ['y','eho','emu','eho','om','ym',
                             'i','ych','ych','ych','ych','ymi']
         
@@ -89,3 +89,6 @@ class PridavneMeno(Slovo,VzorInterface, CisloInterface):
 
         arr = rod_array_dict.get(rod)
         return self.getContent()+arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+
+    def nesklonne(self, rod, cislo, pad):
+        return self.getContent()

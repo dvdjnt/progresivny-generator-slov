@@ -10,7 +10,7 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
 
         self._rod = rod
         self._vzor = vzor
-        self._vzor_dictionary = {
+        self._vzor_dict = {
             'chlap':self.chlap,
             'hrdina':self.hrdina,
             'dub':self.dub,
@@ -25,7 +25,8 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
             'mesto':self.mesto,
             'srdce':self.srdce,
             'vysvedcenie':self.vysvedcenie,
-            'dievca':self.dievca
+            'dievca':self.dievca,
+            'nesklonne':self.nesklonne
 
             # https://www.leitus.sk/podstatne-mena/
         }
@@ -43,7 +44,7 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         return method(cislo, pad)
 
     def getVzorMethod(self,vzor):
-        return self._vzor_dictionary.get(vzor)
+        return self._vzor_dict.get(vzor)
 
     def chlap(self, cislo, pad):
         sklonovanie_arr = ['','a','ovi','a','ovi','om',
@@ -132,6 +133,10 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
+    def nesklonne(self, cislo, pad):
+        print("SERZANT, BOL SOM TRAFENY AAAARRRGGHHHH")
+        return self.getContent()
+
     def switchIndex(self, string, indx1, indx2):
         char_list = list(string)
     

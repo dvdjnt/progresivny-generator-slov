@@ -156,8 +156,32 @@ class GeneratorViet:
         for i in range(0, random_privlastky_number):
             random_pridavne_index = random.randint(0,len(self._pridavne)-1) 
             privlastok = self._pridavne[random_pridavne_index]
-            privlastok_transformed = privlastok.transform(podmet_rod, 'sg','N')
-            block = block + privlastok_transformed + ' '
+            privlastok_trans = privlastok.transform(podmet_rod, 'sg','N')
+            block = block + privlastok_trans + ' '
 
-        block = block + podmet.getContent()
+        block = block + podmet.getContent() + ' '
         return block
+    
+    def generatePrisudokBlock(self):
+        block = ''
+        
+        # sloveso_vzor = podmet.getVzor() # TODO add pad for next block
+
+        random_number = random.randint(1,2) # number of words 
+
+        for i in range(0, random_number):
+            # get random prisudok word
+            random_index = random.randint(0,len(self._slovesa)-1) 
+            sloveso = self._slovesa[random_index]
+            sloveso_trans = sloveso.getContent()
+            block = block + sloveso_trans + ' '
+
+            if random_number > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
+                block = block + 'a '
+                # block = block.replace(' ',' a ',1)
+                # TODO viacero slov, vyriesit a, ked sloveso ma medzery...
+
+        return block
+
+    def chance(self, threshold):
+        return random.random() < threshold
