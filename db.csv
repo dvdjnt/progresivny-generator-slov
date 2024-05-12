@@ -56,7 +56,7 @@ farizejsky,pekny
 mocensky,pekny
 progresivny,pekny
 matovicov,otcov
-caputova,nesklonne
+caputova,otcov
 hegerov,otcov
 korcokov,otcov
 infantilny,pekny
@@ -64,21 +64,25 @@ infantilny,pekny
 #zamena
 
 #slovesa
-chciet
-byt
-znicit
-terorizovat
-zmenit
-zakazat
-zavadzat
-kradnut
-skodit
-rozkradnut
-sterilizovat
-pretlacit
-prizivovat
-oznacit za dezolata
-opovrhovat clovekom menom
+chcel,chce,chciet
+musel,musi,musiet
+nesmel,nesmie,nebude
+mohol,moze,moct
+
+je,bol,bude
+znicil,nici,nicit
+terorizoval,terorizuje,terorizovat
+zmenil,meni,menit
+zakazal,zakazuje,zakaze
+zavadzal,zavadza,zavadzat
+kradol,kradne,ukradne
+skodil,skodi,skodit
+rozkradol,kradne,ukradne
+sterilizoval,sterilizuje,sterilizovat
+pretlacil,tlaci,tlacit
+sa prizivoval,sa prizivuje,sa prizivovat
+za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci
+opovrhoval,opovrhuje,opovrhovat
 
 
 #predlozka

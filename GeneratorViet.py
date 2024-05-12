@@ -99,7 +99,7 @@ class GeneratorViet:
                             self._pridavne.append(obj)
 
                         if (sd_string == 'sloveso'):
-                            obj = method(content=line[0])
+                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2])
                             self._slovesa.append(obj)
 
                         # words.append(obj)
@@ -130,15 +130,15 @@ class GeneratorViet:
 
         # return sentence
 
+
         podmet = self.generatePodmet()
         podmetBlock1 = self.generatePodmetBlock(podmet)
         prisudokBlock = self.generatePrisudokBlock(podmet)
-        # podmetBlock2 = self.generatePodmetBlock(podmet)
+        podmetBlock2 = self.generatePodmetBlock(podmet)
 
-        return podmetBlock1 + prisudokBlock
+        return podmetBlock1 + prisudokBlock + podmetBlock2
 
-
-    def getWord(self, data):
+    def getRandomWord(self, data):
         wordtype = data
 
         if isinstance(data, int):
@@ -171,6 +171,7 @@ class GeneratorViet:
         block = ''
         
         # sloveso_vzor = podmet.getVzor() # TODO add pad for next block
+        # TODO pouzit getRandomWord
 
         random_number = random.randint(1,2) # number of words 
 

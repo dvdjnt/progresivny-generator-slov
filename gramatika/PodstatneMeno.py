@@ -7,7 +7,7 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         super().__init__(content)
         VzorInterface.__init__(self)
         CisloInterface.__init__(self)
-
+        # add cislo 
         self._rod = rod
         self._vzor = vzor
         self._vzor_dict = {
@@ -134,7 +134,6 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
     def nesklonne(self, cislo, pad):
-        print("SERZANT, BOL SOM TRAFENY AAAARRRGGHHHH")
         return self.getContent()
 
     def switchIndex(self, string, indx1, indx2):

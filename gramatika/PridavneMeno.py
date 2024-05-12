@@ -90,5 +90,6 @@ class PridavneMeno(Slovo,VzorInterface, CisloInterface):
         arr = rod_array_dict.get(rod)
         return self.getContent()+arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
+
     def nesklonne(self, rod, cislo, pad):
         return self.getContent()
