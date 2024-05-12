@@ -125,13 +125,19 @@ class GeneratorViet:
     #     string = ''
 
         
-    #     for i in range(0, len(template)):
-    #         sd_type = self._sd_enum[i]
-            
-    #         string.join(self.)
+    #     for i in range(0, len(template)-1):
+    #         # word_type = self._sd_enum[i]
+    #         string.join(self.getWord(i))
 
-    def getWord(self, type_int):
-        wordtype = self._sd_enum[type_int] 
+    def getWord(self, data):
+        wordtype = data
+
+        if isinstance(data, int):
+            wordtype = self._sd_enum[data] 
+            print(f"Processing integer: {data}")
+        elif not isinstance(data, str):
+            raise ValueError("Unsupported data type")
+        
         array = self._sd_arrays.get(wordtype)   # get array of words by type
         random_index = random.randint(0,len(array)-1)
         return array[random_index].getContent()
