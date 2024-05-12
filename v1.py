@@ -39,7 +39,7 @@ words_in_sentence_max = 12
 
 
 final_string = ''
-version = 4
+version = 1
 
 if version == 2:
     for i in range(sentence_count):
