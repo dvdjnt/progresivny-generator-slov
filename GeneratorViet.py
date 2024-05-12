@@ -125,7 +125,7 @@ class GeneratorViet:
         print(template)
         sentence = ''
 
-        for i in range(0, len(template)-1):
+        for i in range(0, len(template)):
             index = int(template[i])
             word = self.getWord(index)
             sentence = sentence + word
