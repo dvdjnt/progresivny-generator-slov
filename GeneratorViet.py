@@ -166,25 +166,19 @@ class GeneratorViet:
 
         for i in range(0, prisudky_amount):
 
-
-
             # modal chance
             if self.chance(0.7):
                 prisudok = self.getModalBlock(cas, rod, cislo, sloveso)
                 cas = 'neurcity'
                 block = block + prisudok
-            else:
-                sloveso_trans = sloveso.transform(cas, rod, cislo)
-                block = block + sloveso_trans + ' '
+
+            sloveso_trans = sloveso.transform(cas, rod, cislo)
+            block = block + sloveso_trans + ' '
 
                 # if prisudky_amount > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
                 #     block = block + 'a '
                 #     # block = block.replace(' ',' a ',1)
                 #     # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
-
-
-
-
 
         return block
     
