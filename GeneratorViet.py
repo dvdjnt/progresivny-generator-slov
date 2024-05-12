@@ -120,21 +120,24 @@ class GeneratorViet:
         #     print(word.getVzor())
         #     print()
 
-    # def generateSentence(self):
-    #     template = self.getSentenceTemplate()
-    #     string = ''
+    def generateSentence(self):
+        template = str(self.getSentenceTemplate())
+        print(template)
+        sentence = ''
 
-        
-    #     for i in range(0, len(template)-1):
-    #         # word_type = self._sd_enum[i]
-    #         string.join(self.getWord(i))
+        for i in range(0, len(template)-1):
+            index = int(template[i])
+            word = self.getWord(index)
+            sentence = sentence + word
+            sentence = sentence + ' '
+
+        return sentence
 
     def getWord(self, data):
         wordtype = data
 
         if isinstance(data, int):
             wordtype = self._sd_enum[data] 
-            print(f"Processing integer: {data}")
         elif not isinstance(data, str):
             raise ValueError("Unsupported data type")
         
