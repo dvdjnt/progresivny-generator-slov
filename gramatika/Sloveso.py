@@ -1,16 +1,19 @@
 # from gramatika.Slovo import Slovo
 
 class Sloveso():
-    def __init__(self,content_m,content_p,content_b,pad):
+    def __init__(self,content_m,content_p,content_b,content_n,typ,pad):
         # super().__init__(content)
         self._content_m=content_m
         self._content_p=content_p
         self._content_b=content_b
+        self._content_n=content_n
+        self._typ=typ
         self._pad=pad
         self._cas_dict = {
             'minuly':self.minuly,
             'pritomny':self.pritomny,
-            'buduci':self.buduci
+            'buduci':self.buduci,
+            'neurcity':self.neurcity
         }
 
     def transform(self, cas, rod, cislo):
@@ -26,6 +29,9 @@ class Sloveso():
 
     def getContent(self):
         return self._content_p
+    
+    def getTyp(self):
+        return self._typ
     
     def fill_sklonovanie_array(self, array):
         self._sklonovanie_array = array
@@ -90,3 +96,6 @@ class Sloveso():
             string = 'budu '+ slovo
 
         return string
+    
+    def neurcity(self, rod, cislo):
+        return self._content_n

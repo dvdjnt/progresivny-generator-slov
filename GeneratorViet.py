@@ -43,6 +43,7 @@ class GeneratorViet:
             'pridavne':self._pridavne,
             'zameno':3,
             'sloveso':self._slovesa,
+            'sloveso_modal':self._slovesa_modal,
             'cislovka':5,
             'prislovka':6,
             'predlozka':7,
@@ -63,6 +64,7 @@ class GeneratorViet:
         self._podstatne = []
         self._pridavne = []
         self._slovesa = []
+        self._slovesa_modal = []
 
         i = 1
         enum_counter = 0 # used for correct class creation according to _sd_enum
@@ -97,8 +99,13 @@ class GeneratorViet:
                             self._pridavne.append(obj)
 
                         if (sd_string == 'sloveso'):
-                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2],pad=line[3])
-                            self._slovesa.append(obj)
+                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2],content_n=line[3], 
+                                         typ=line[4],pad=line[5])
+                            
+                            if obj.getTyp() == 'plne':
+                                self._slovesa.append(obj)
+                            elif obj.getTyp() == 'modal':
+                                self._slovesa_modal.append(obj)
 
                         # words.append(obj)
 
@@ -143,16 +150,22 @@ class GeneratorViet:
     def generatePrisudokBlock(self, sloveso, podmet):
         block = ''
 
-        random_number = random.randint(1,2) # number of words 
+        prisudky_amount = random.randint(1,2) # number of words 
+        # TODO random cas
+        cas = 'pritomny'
 
-        for i in range(0, random_number):
-            sloveso_trans = sloveso.transform('pritomny',podmet.getRod(), 'sg')
-            block = block + sloveso_trans + ' '
+        for i in range(0, prisudky_amount):
+            if self.chance(0.7):
+                block = block + self.getRandomWord('sloveso_modal').transform(cas, podmet.getRod(), 'sg') + ' ' + sloveso.transform('neurcity',podmet.getRod(),'sg') + ' '
+            else:
+                sloveso_trans = sloveso.transform(cas,podmet.getRod(), 'sg')
+                block = block + sloveso_trans + ' '
 
-            if random_number > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
+            if prisudky_amount > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
                 block = block + 'a '
                 # block = block.replace(' ',' a ',1)
-                # TODO viacero slov, vyriesit a, ked sloveso ma medzery...
+                # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
+
 
         return block
 
@@ -174,17 +187,15 @@ class GeneratorViet:
     def getPrisudok(self):
         return self.getRandomWord('sloveso')
 
-    def getWords(self, privlastky_number, data, rod, cislo, pad):
-        wordtype = data
-
-        if isinstance(data, int):
-            wordtype = self._sd_enum[data] 
-        elif not isinstance(data, str):
+    def getWords(self, word_amount, wordtype, rod, cislo, pad):
+        if isinstance(wordtype, int):
+            wordtype = self._sd_enum[wordtype] 
+        elif not isinstance(wordtype, str):
             raise ValueError("Unsupported data type")
     
         block = ''
 
-        for i in range(0, privlastky_number):
+        for i in range(0, word_amount):
             privlastok = self.getRandomWord(wordtype)
             privlastok_trans = privlastok.transform(rod, cislo, pad)
             block = block + privlastok_trans + ' '

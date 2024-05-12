@@ -36,7 +36,7 @@ bratislavska kaviaren,z,dlan
 hyena,z,zena
 
 PSko,s,mesto
-hniezdo,s,srdce
+hniezdo,s,mesto
 centrum,s,mesto
 pohlavie,s,vysvedcenie
 OLANO,s,mesto
@@ -64,26 +64,27 @@ infantilny,pekny
 #zamena
 
 #slovesa
-chcel,chce,chciet,A
-musel,musi,musiet,N
-nesmel,nesmie,nebude,N
-mohol,moze,moct,N
-je,bol,bude,N
-mal,ma,bude mat,A
+je,bol,bude,byt,neplno,N
+mal,ma,mat,mat,neplno,A
 
-znicil,nici,nicit,A
-terorizoval,terorizuje,terorizovat,A
-zmenil,meni,menit,G
-zakazal,zakazuje,zakaze,A
-zavadzal,zavadza,zavadzat,A
-kradol,kradne,ukradne,A
-skodil,skodi,skodit,D
-rozkradol,kradne,ukradne,A
-sterilizoval,sterilizuje,sterilizovat,A
-pretlacil,tlaci na,tlacit na,G
-sa prizivoval,sa prizivuje,sa prizivovat,L
-za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,A
-opovrhoval,opovrhuje,opovrhovat,I
+chcel,chce,chciet,chciet,modal,A
+musel,musi,musiet,musiet,modal,N
+smel,smie,smiet,smiet,modal,N
+mohol,moze,moct,moct,modal,N
+
+znicil,nici,nicit,nicit,plne,A
+terorizoval,terorizuje,terorizovat,terorizovat,plne,A
+zmenil,meni,menit,menit,plne,G
+zakazal,zakazuje,zakaze,zakazat,plne,A
+zavadzal,zavadza,zavadzat,zavadzat,plne,A
+kradol,kradne,ukradne,ukradnut,plne,A
+skodil,skodi,skodit,skodit,plne,D
+rozkradol,kradne,ukradne,ukradnut,plne,A
+sterilizoval,sterilizuje,sterilizovat,sterilizovat,plne,A
+pretlacil,tlaci na,tlacit na,tlacit,plne,G
+sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat,plne,L
+za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,oznacovat za dezolata,plne,A
+opovrhoval,opovrhuje,opovrhovat,opovrhovat,plne,I
 
 
 #predlozka
