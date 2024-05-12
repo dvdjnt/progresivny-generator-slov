@@ -3,6 +3,7 @@ from gramatika.Slovo import Slovo
 class Sloveso(Slovo):
     def __init__(self,content):
         super().__init__(content)
+
         self._cas_dict = {
             'minuly':self.minuly,
             'pritomny':self.pritomny,
@@ -15,7 +16,7 @@ class Sloveso(Slovo):
         return method(rod, cislo)
 
     def getCasMethod(self,cas):
-        return self._vzor_dict.get(cas)
+        return self._cas_dict.get(cas)
     
     def minuly(self, rod, cislo):
         sklonovanie_arr = ['l','la','lo',

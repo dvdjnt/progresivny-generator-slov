@@ -123,12 +123,20 @@ class GeneratorViet:
         print(f'sentence template: {template}\n')
         sentence = ''
 
-        for i in range(0, len(template)):
-            index = int(template[i])
-            word = self.getWord(index)
-            sentence = sentence + word + ' '
+        # for i in range(0, len(template)):
+        #     index = int(template[i])
+        #     word = self.getWord(index)
+        #     sentence = sentence + word + ' '
 
-        return sentence
+        # return sentence
+
+        podmet = self.generatePodmet()
+        podmetBlock1 = self.generatePodmetBlock(podmet)
+        prisudokBlock = self.generatePrisudokBlock(podmet)
+        # podmetBlock2 = self.generatePodmetBlock(podmet)
+
+        return podmetBlock1 + prisudokBlock
+
 
     def getWord(self, data):
         wordtype = data
@@ -142,12 +150,9 @@ class GeneratorViet:
         random_index = random.randint(0,len(array)-1)
         return array[random_index].getContent()
     
-    def generatePodmetBlock(self):
+    def generatePodmetBlock(self, podmet):
         block = ''
 
-        # get random podmet word
-        random_index = random.randint(0,len(self._podstatne)-1) 
-        podmet = self._podstatne[random_index]
         podmet_rod = podmet.getRod()
 
         # random number of privlastky
@@ -162,7 +167,7 @@ class GeneratorViet:
         block = block + podmet.getContent() + ' '
         return block
     
-    def generatePrisudokBlock(self):
+    def generatePrisudokBlock(self, podmet):
         block = ''
         
         # sloveso_vzor = podmet.getVzor() # TODO add pad for next block
@@ -173,7 +178,7 @@ class GeneratorViet:
             # get random prisudok word
             random_index = random.randint(0,len(self._slovesa)-1) 
             sloveso = self._slovesa[random_index]
-            sloveso_trans = sloveso.getContent()
+            sloveso_trans = sloveso.transform('pritomny',podmet.getRod(), 'sg')
             block = block + sloveso_trans + ' '
 
             if random_number > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
@@ -183,5 +188,12 @@ class GeneratorViet:
 
         return block
 
+    def generatePodmet(self):
+        # get random podmet word
+        random_index = random.randint(0,len(self._podstatne)-1) 
+        podmet = self._podstatne[random_index]
+
+        return podmet
+    
     def chance(self, threshold):
         return random.random() < threshold
