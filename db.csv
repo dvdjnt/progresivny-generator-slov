@@ -1,16 +1,19 @@
 #podstatne mena
-oportunista,m,hrdina
 heger,m,chlap
-soros,m,chlap
-brusel,m,hrdina
-slnieckar,m,chlap
-sulik,m,chlap
-progresivec,m,chlap
 matovic,m,chlap
+korcok,m,chlap
+lipsic,m,chlap
+sulik,m,chlap
+soros,m,chlap
+gates,m,chlap
+zapad,m,hrdina
+vychod,m,hrdina
+brusel,m,dub
+oportunista,m,hrdina
+slnieckar,m,chlap
+progresivec,m,chlap
 satanista,m,hrdina
 fasista,m,hrdina
-lipsic,m,chlap
-korcok,m,chlap
 dennik n,m,nesklonne
 kapitalista,m,hrdina
 zidojaster,m,chlap
@@ -22,13 +25,14 @@ fasizmus,m,hrdina
 farizej,m,chlap
 oligarcha,m,hrdina
 psychopat,m,chlap
-covid,m,hrdina
+covid,m,nesklonne
 hrdina,m,hrdina
 saso,m,chlap
 vrchol,m,hrdina
 rozklad,m,hrdina
-pokus,m,hrdina
+pokus,m,dub
 propagandista,m,hrdina
+rozum,m,dub
 
 europska unia,z,ulica
 markiza,z,zena
@@ -39,12 +43,13 @@ caputova,z,otcov
 mimovladka,z,zena
 propaganda,z,zena
 elita,z,zena
-bratislavska kaviaren,z,dlan
+kaviaren,z,dlan
 hyena,z,zena
 pandemia,z,ulica
-siet,z,ulica
+siet,z,kost
 korupcia,z,ulica
-rozum,m,hrdina
+strana,z,zena
+NAKA,z,nesklonne
 
 PSko,s,mesto
 hniezdo,s,mesto
@@ -56,6 +61,7 @@ prostredie,s,vysvedcenie
 aktuality,z,nesklonne
 72 pohlavi,s,nesklonne
 poradcovia caputovej,m,nesklonne
+poradca,m,hrdina
 
 #pridavne mena (male)
 liberalny,pekny
@@ -81,12 +87,14 @@ LGBT,nesklonne
 zvrateny,pekny
 zdravy,pekny
 opacny,pekny
+zahranicny,pekny
+zidovsky,pekny
 
 #zamena
 
 #slovesa
-je,bol,bude,byt,neplno,N
-mal,ma,mat,mat,neplno,A
+je,bol,bude,byt,neplne,N
+mal,ma,mat,mat,neplne,A
 
 chcel,chce,chciet,chciet,modal,A
 musel,musi,musiet,musiet,modal,N
@@ -96,14 +104,14 @@ prestal,prestava,prestane,prestat,modal,A
 zacal,zacina,zacne,zacat,modal,A
 prestal,prestava,prestane,prestat,modal,A
 dal,dava,da,dat,modal,A
-snazil,snazi,snazit,snazit,modal,A
+sa snazil,sa snazi,sa snazit,sa snazit,modal,A
+zmenil,meni,menit,menit,modal,G
 
 znicil,nici,nicit,nicit,plne,A
 terorizoval,terorizuje,terorizovat,terorizovat,plne,A
-zmenil,meni,menit,menit,plne,G
-zakazal,zakazuje,zakaze,zakazat,plne,A
+zakazal,zakazuje,zakaze,zakazovat,plne,A
 zavadzal,zavadza,zavadzat,zavadzat,plne,A
-kradol,kradne,ukradne,ukradnut,plne,A
+kradol,kradne,ukradne,kradnut,plne,A
 skodil,skodi,skodit,skodit,plne,D
 rozkradol,kradne,ukradne,ukradnut,plne,A
 sterilizoval,sterilizuje,sterilizovat,sterilizovat,plne,A
@@ -116,6 +124,7 @@ rubal,rube,rubat,rubat,plne,A
 podporil,podporuje,podpori,podporit,plne,A
 podsuval,podsuva,podsunie,podsuvat,plne,A
 dovolil,dovoluje,dovoli,dovolit,plne,A
+zavrel,zatvara,zatvori,zatvorit,plne,A
 
 
 #predlozka

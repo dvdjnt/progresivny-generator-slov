@@ -31,6 +31,9 @@ class Sloveso():
         return self._content_p
     
     def getTyp(self):
+        # modal
+        # plne
+        # neplne
         return self._typ
     
     def fill_sklonovanie_array(self, array):
@@ -86,9 +89,6 @@ class Sloveso():
 
         if lastLetter != 't':
             return slovo
-        
-        # TODO add modalne slova
-        # TODO pridat 'ne' pred sloveso
 
         if cislo == 'sg':
             string = 'bude '+ slovo

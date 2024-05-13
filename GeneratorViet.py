@@ -113,18 +113,19 @@ class GeneratorViet:
                             break
                         i+=1
 
-    def generateSentence(self, amount):
+    def generateSentence(self, sentence_amount):
 
 
         template = str(self.getSentenceTemplate())
-        print(f'sentence template: {template}\n')
+        print(f'sentence template: {template}')
+        print(f'sentence amount: {sentence_amount}\n')
         sentence = ''
         # TODO add template
 
 
-        for i in range(0, amount):
+        for i in range(0, sentence_amount):
             podmet = self.getPodmet()
-            prisudok = self.getPrisudok()
+            prisudok = self.getPlnovyznamnovyPrisudok()
 
             podmetBlock = self.generatePodmetBlock(podmet)
             prisudokBlock = self.generatePrisudokBlock(prisudok, podmet)
@@ -160,31 +161,48 @@ class GeneratorViet:
             prisudky_amount+= 1
 
         # TODO random cas
+        # TODO dont repeat words
+
         cas = 'pritomny'
         rod = podmet.getRod()
         cislo = 'sg'
 
         for i in range(0, prisudky_amount):
 
+            cas = 'pritomny'
+
             # modal chance
             if self.chance(0.7):
                 prisudok = self.getModalBlock(cas, rod, cislo, sloveso)
+                prisudok = self.negativeChance(prisudok)
                 cas = 'neurcity'
                 block = block + prisudok
 
             sloveso_trans = sloveso.transform(cas, rod, cislo)
+            sloveso_trans = self.negativeChance(sloveso_trans)
             block = block + sloveso_trans + ' '
 
-                # if prisudky_amount > 1 and self.chance(0.6) and i == 0: # 40% chance for spojka with multiple words
-                #     block = block + 'a '
-                #     # block = block.replace(' ',' a ',1)
-                #     # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
+            if prisudky_amount > 1  and i == 0 and self.chance(0.7): # chance for spojka with multiple words
+                char = ''
+                if self.chance(0.7):
+                    char = 'a '
+                else:
+                    char = 'ale '
+            
+                block = block + char
+
+                # block = block.replace(' ',' a ',1)
+                # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
 
         return block
     
     def getModalBlock(self, cas, rod, cislo, sloveso):
         return self.getRandomWord('sloveso_modal').transform(cas, rod, cislo) + ' ' #+ sloveso.transform('neurcity',rod,cislo) + ' '
 
+    def negativeChance(self, string):
+        if self.chance(0.2):
+            string = 'ne'+string
+        return string
 
     def generatePredmetBlock(self, predmet_pad):
         block = ''
@@ -201,8 +219,15 @@ class GeneratorViet:
     def getPodmet(self):
         return self.getRandomWord('podstatne')
     
-    def getPrisudok(self):
-        return self.getRandomWord('sloveso')
+    def getPlnovyznamnovyPrisudok(self):
+        randomSloveso = self.getRandomWord('sloveso')
+        # print(randomSloveso.getTyp())
+
+        while randomSloveso.getTyp == 'plne':
+            # print(randomSloveso.getTyp())
+            randomSloveso = self.getRandomWord('sloveso')
+
+        return randomSloveso
 
     def getWords(self, word_amount, wordtype, rod, cislo, pad):
         if isinstance(wordtype, int):
@@ -214,6 +239,9 @@ class GeneratorViet:
 
         for i in range(0, word_amount):
             privlastok = self.getRandomWord(wordtype)
+
+            # if block contains.....
+
             privlastok_trans = privlastok.transform(rod, cislo, pad)
             block = block + privlastok_trans + ' '
 
