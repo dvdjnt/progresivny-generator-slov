@@ -8,6 +8,8 @@ class Slovo:
         
     def fill_sklonovanie_array(self, array):
         self._sklonovanie_array = array
+
+
     
 
         

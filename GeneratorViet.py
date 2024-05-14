@@ -53,7 +53,10 @@ class GeneratorViet:
         }
 
         self._template_arr = [141, 21421, 2141] # word blocks based on _sd_enum
-        
+
+        self._neChance = 0.2
+        self._modalChance = 0.3
+
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
         return self._template_arr[random_index]
@@ -69,6 +72,9 @@ class GeneratorViet:
         i = 1
         enum_counter = 0 # used for correct class creation according to _sd_enum
 
+        # TODO do buducna - nenaplnat array, iba si vziat pointer na line na file - lepsia memory
+        #
+
         with open ('db.csv', mode ='r', encoding='utf-8') as file:
             csvFile = csv.reader(file)
 
@@ -78,7 +84,7 @@ class GeneratorViet:
                         first_line_char = line[0][0]
 
                         if first_line_char == '#':
-                            enum_counter+=1  # skips line
+                            enum_counter += 1  # skips line
                             continue
                         if first_line_char == '\n':
                             continue
@@ -90,17 +96,16 @@ class GeneratorViet:
                         method = self._sd_methods.get(sd_string)
 
                         # call method - create new object 
-                        if (sd_string == 'podstatne'):
+                        if sd_string == 'podstatne':
                             obj = method(content=line[0], rod=line[1], vzor=line[2])
                             self._podstatne.append(obj)
                         
-                        if (sd_string == 'pridavne'):
+                        elif sd_string == 'pridavne':
                             obj = method(content=line[0], vzor=line[1])
                             self._pridavne.append(obj)
 
-                        if (sd_string == 'sloveso'):
-                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2],content_n=line[3], 
-                                         typ=line[4],pad=line[5])
+                        elif sd_string == 'sloveso':
+                            obj = method(content_m=line[0],content_p=line[1],content_b=line[2],content_n=line[3], typ=line[4],pad=line[5])
                             
                             if obj.getTyp() == 'plne':
                                 self._slovesa.append(obj)
@@ -109,143 +114,179 @@ class GeneratorViet:
 
                         # words.append(obj)
 
-                        if i == 100:
+                        if i == 150:
                             break
-                        i+=1
+                        i += 1
 
     def generateSentence(self, sentence_amount):
-
 
         template = str(self.getSentenceTemplate())
         print(f'sentence template: {template}')
         print(f'sentence amount: {sentence_amount}\n')
         sentence = ''
         # TODO add template
+        # TODO prekopat - keep objects until compilation into string (sentence)
 
 
         for i in range(0, sentence_amount):
-            podmet = self.getPodmet()
-            prisudok = self.getPlnovyznamnovyPrisudok()
+            podmet_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
+            # prisudok_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
+            prisudok_amount = random.choices([1, 2], weights=[0.0, 0.1], k=1)[0]
+            predmet_amount = random.choices([1, 2, 3], weights=[0.5, 0.4, 0.1], k=1)[0]
 
-            podmetBlock = self.generatePodmetBlock(podmet)
-            prisudokBlock = self.generatePrisudokBlock(prisudok, podmet)
-            predmetBlock = self.generatePredmetBlock(prisudok.getPad())
-            sentence = sentence + podmetBlock + prisudokBlock + predmetBlock + '...'
+            podmety = self.getPmena(podmet_amount, wordtype='podstatne')
+            prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
+            predmety = self.getPmena(predmet_amount, wordtype='podstatne')
+
+            podmetBlock = self.generatePodmetBlock(podmety)
+            prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
+            predmetBlock = self.generatePredmetBlock(predmety, prisudky)
+
+            blocks = podmetBlock + prisudokBlock + predmetBlock
+
+            sentence = self.compileSentence(blocks)
 
         return sentence
+
+    def generatePodmetBlock(self, podmety):
+        # TODO predlozka a,s - vycasovat druhy podmet...
+
+        rod = podmety[0].getRod()   # rod podla prveho podmetu, dava to zmysel tak
+        cislo = 'sg'
+        pad = 'N'
+
+        for i in range(0, len(podmety)):
+            podmety[i].transformPrepare(cislo, pad)
+
+        privlastky_amount = random.randint(1,3)
+        privlastky = self.getPmena(privlastky_amount, 'pridavne')
+
+        for i in range(0, len(privlastky)):
+            privlastky[i].transformPrepare(rod, cislo, pad)
+
+
+        return privlastky + podmety
+    
+    def generatePrisudokBlock(self, prisudky, podmety):
+        # TODO random cas
+        # TODO add prislovky
+        words = []
+
+        prisudky_amount = len(prisudky)
+
+        cas = 'pritomny'
+
+        if len(podmety) == 1:
+            rod = podmety[0].getRod()
+            cislo = 'sg'
+        else:
+            rod = podmety[-1].getRod()
+            cislo = 'pl'
+
+        for i in range(0, prisudky_amount):
+            cas = 'pritomny'
+
+            # TODO sloveso-menny prisudok = prisudok + podstatne meno (bude zlodej, meni cloveka)
+
+            # modal chance
+            if self.chance(self._modalChance):
+                modal_sloveso = self.getRandomWord('sloveso_modal')
+                modal_sloveso.transformPrepare(cas, rod, cislo)
+                # modal_sloveso = self.negativeChance(modal_sloveso)
+                cas = 'neurcity'
+                words.append(modal_sloveso)
+
+            # sklonovanie plnovyznamoveho slovesa
+            prisudky[i].transformPrepare(cas, rod, cislo)
+            # prisudok_trans = self.negativeChance(prisudok_trans)
+
+            words.append(prisudky[i])   # to avoid [[<Sloveso>]]
+
+        return words
+
+    def generatePredmetBlock(self, predmety, prisudky):
+        rod = predmety[0].getRod()
+        cislo = 'sg'
+        pad = prisudky[-1].getPad()
+
+
+        for i in range(0, len(predmety)):
+            # casovanie predmetov podla posledneho prisudku vo vete
+            predmety[i].transformPrepare('sg',pad)
+
+        privlastky_amount = random.choices([1, 2, 3], weights=[0.4, 0.3, 0.3], k=1)[0]
+        privlastky = self.getPmena(privlastky_amount, 'pridavne')
+
+        for i in range(len(privlastky)):
+            privlastky[i].transformPrepare(rod, cislo, pad)
+
+        return privlastky + predmety
+
+    def compileSentence(self, blocks):
+        sentence = ''
+
+        for wordObj in blocks:
+            # if isinstance(wordObj, PodstatneMeno):
+
+            wordString = wordObj.transform()
+            sentence = sentence + wordString + ' '
+
+        return sentence
+
 
     def getRandomWord(self, data):
         wordtype = data
 
         if isinstance(data, int):
-            wordtype = self._sd_enum[data] 
+            wordtype = self._sd_enum[data]
         elif not isinstance(data, str):
             raise ValueError("Unsupported data type")
-        
+
         array = self._sd_arrays.get(wordtype)   # get array of words by type
         random_index = random.randint(0,len(array)-1)
+
         return array[random_index]
+
+    def getPmena(self, word_amount, wordtype):
+
+        # type check
+        if isinstance(wordtype, int):
+            wordtype = self._sd_enum[wordtype]
+        elif not isinstance(wordtype, str):
+            raise ValueError("Unsupported data type")
+
+        words = []
+
+        for i in range(0, word_amount):
+
+            word = self.getRandomWord(wordtype)
+
+            # no duplicates
+            while word in words:
+                word = self.getRandomWord(wordtype)
+
+            words.append(word)
+
+        return words    # list of words
     
-    def generatePodmetBlock(self, podmet):
-        privlastky_amount = random.randint(0,3)
+    def getPlnovyznamovePrisudky(self, amount):
+        slovesa = []
 
-        privlastky = self.getWords(privlastky_amount, 'pridavne', podmet.getRod(), 'sg', 'N')
+        for i in range(0, amount):
+            randomSloveso = self.getRandomWord('sloveso')
 
-        return privlastky + podmet.getContent() + ' '
+            while not randomSloveso.getTyp == 'plne' and randomSloveso in slovesa:
+                randomSloveso = self.getRandomWord('sloveso')
 
-    def generatePrisudokBlock(self, sloveso, podmet):
-        block = ''
+            slovesa.append(randomSloveso)
 
-        prisudky_amount = 1
-        if self.chance(0.3):
-            prisudky_amount+= 1
-
-        # TODO random cas
-        # TODO dont repeat words
-
-        cas = 'pritomny'
-        rod = podmet.getRod()
-        cislo = 'sg'
-
-        for i in range(0, prisudky_amount):
-
-            cas = 'pritomny'
-
-            # modal chance
-            if self.chance(0.7):
-                prisudok = self.getModalBlock(cas, rod, cislo, sloveso)
-                prisudok = self.negativeChance(prisudok)
-                cas = 'neurcity'
-                block = block + prisudok
-
-            sloveso_trans = sloveso.transform(cas, rod, cislo)
-            sloveso_trans = self.negativeChance(sloveso_trans)
-            block = block + sloveso_trans + ' '
-
-            if prisudky_amount > 1  and i == 0 and self.chance(0.7): # chance for spojka with multiple words
-                char = ''
-                if self.chance(0.7):
-                    char = 'a '
-                else:
-                    char = 'ale '
-            
-                block = block + char
-
-                # block = block.replace(' ',' a ',1)
-                # TODO viacero slov, vyriesit a, ked sloveso ma medzery, pridat 's'
-
-        return block
-    
-    def getModalBlock(self, cas, rod, cislo, sloveso):
-        return self.getRandomWord('sloveso_modal').transform(cas, rod, cislo) + ' ' #+ sloveso.transform('neurcity',rod,cislo) + ' '
+        return slovesa  # list of words
 
     def negativeChance(self, string):
-        if self.chance(0.2):
+        if self.chance(self._neChance):
             string = 'ne'+string
         return string
 
-    def generatePredmetBlock(self, predmet_pad):
-        block = ''
-
-        predmet = self.getRandomWord('podstatne')
-        predmet_trans = predmet.transform('sg',predmet_pad)
-        
-        privlastky_amount = random.randint(0,3)
-
-        privlastky = self.getWords(privlastky_amount, 'pridavne', predmet.getRod(), 'sg', predmet_pad) 
-
-        return block + privlastky + predmet_trans + ' '
-
-    def getPodmet(self):
-        return self.getRandomWord('podstatne')
-    
-    def getPlnovyznamnovyPrisudok(self):
-        randomSloveso = self.getRandomWord('sloveso')
-        # print(randomSloveso.getTyp())
-
-        while randomSloveso.getTyp == 'plne':
-            # print(randomSloveso.getTyp())
-            randomSloveso = self.getRandomWord('sloveso')
-
-        return randomSloveso
-
-    def getWords(self, word_amount, wordtype, rod, cislo, pad):
-        if isinstance(wordtype, int):
-            wordtype = self._sd_enum[wordtype] 
-        elif not isinstance(wordtype, str):
-            raise ValueError("Unsupported data type")
-    
-        block = ''
-
-        for i in range(0, word_amount):
-            privlastok = self.getRandomWord(wordtype)
-
-            # if block contains.....
-
-            privlastok_trans = privlastok.transform(rod, cislo, pad)
-            block = block + privlastok_trans + ' '
-
-        return block
-
     def chance(self, threshold):
         return random.random() < threshold
+

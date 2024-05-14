@@ -17,15 +17,29 @@ class PridavneMeno(Slovo,VzorInterface, CisloInterface):
 
             # https://www.leitus.sk/pridavne-mena/
         }
+
+        self._rod_next = 'm'
+        self._cislo_next = 'sg'
+        self._pad_next = ''
     
     def getVzor(self):
         return self._vzor
 
-    def transform(self, rod, cislo, pad):
+    def transform(self):
+        method = self.getVzorMethod(self.getVzor())
+        return method(self._rod_next, self._cislo_next, self._pad_next)
+
+    def transformPrepare(self, rod, cislo, pad):
+        self._rod_next = rod
+        self._cislo_next = cislo
+        self._pad_next = pad
+
+    def transformRaw(self, rod, cislo, pad):
         slovo = self.getContent()
 
         method = self.getVzorMethod(self.getVzor())
         return method(rod, cislo, pad)
+
             
     def getVzorMethod(self, vzor):
         return self._vzor_dictionary.get(vzor)

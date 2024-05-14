@@ -15,8 +15,20 @@ class Sloveso():
             'buduci':self.buduci,
             'neurcity':self.neurcity
         }
+        self._cas_next = 'pritomny'
+        self._rod_next = 'm'
+        self._cislo_next = 'sg'
 
-    def transform(self, cas, rod, cislo):
+    def transform(self):
+        method = self.getCasMethod(self._cas_next)
+        return method(self._rod_next, self._cislo_next)
+
+    def transformPrepare(self, cas, rod, cislo):
+        self._cas_next = cas
+        self._rod_next = rod
+        self._cislo_next = cislo
+
+    def transformRaw(self, cas, rod, cislo):
         # sklonovanie_arr = ['l',]
         method = self.getCasMethod(cas)
         return method(rod, cislo)

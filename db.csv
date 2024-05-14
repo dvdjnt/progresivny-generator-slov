@@ -33,6 +33,8 @@ rozklad,m,hrdina
 pokus,m,dub
 propagandista,m,hrdina
 rozum,m,dub
+USA,s,nesklonne
+dzurinda,m,chlap
 
 europska unia,z,ulica
 markiza,z,zena
@@ -50,6 +52,7 @@ siet,z,kost
 korupcia,z,ulica
 strana,z,zena
 NAKA,z,nesklonne
+politika,z,zena
 
 PSko,s,mesto
 hniezdo,s,mesto
@@ -85,10 +88,12 @@ medzinarodny,pekny
 absolutny,pekny
 LGBT,nesklonne
 zvrateny,pekny
-zdravy,pekny
 opacny,pekny
 zahranicny,pekny
 zidovsky,pekny
+americky,pekny
+rusky,pekny
+mimovladkovy,pekny
 
 #zamena
 

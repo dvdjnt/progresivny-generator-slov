@@ -10,6 +10,7 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         # add cislo 
         self._rod = rod
         self._vzor = vzor
+        self._cislo = 'sg'  # TODO pomnozne
         self._vzor_dict = {
             'chlap':self.chlap,
             'hrdina':self.hrdina,
@@ -31,16 +32,29 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
 
             # https://www.leitus.sk/podstatne-mena/
         }
+        self._cislo_next = self._cislo
+        self._pad_next = ''
 
     def getRod(self):
         return self._rod
     
     def getVzor(self):
         return self._vzor
-    
+
+    def getCislo(self):
+        return self._cislo
+
     # def changeCislo(self, cislo):
-        
-    def transform(self, cislo, pad):
+
+    def transform(self):
+        method = self.getVzorMethod(self.getVzor())
+        return method(self._cislo_next, self._pad_next)
+
+    def transformPrepare(self, cislo, pad):
+        self._cislo_next = cislo
+        self._pad_next = pad
+
+    def transformRaw(self, cislo, pad):
         method = self.getVzorMethod(self.getVzor())
         return method(cislo, pad)
 
@@ -112,7 +126,7 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
             char = sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)] 
 
             return self.insertLetterAtIndex(slovo, char, len(slovo)-3)
-        # TODO index sa moze hybat
+        # TODO index sa moze hybat (fasizmus, centrum)
 
         return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
