@@ -1,41 +1,44 @@
 #podstatne mena
-heger,m,chlap
-matovic,m,chlap
-korcok,m,chlap
-lipsic,m,chlap
-sulik,m,chlap
-soros,m,chlap
-gates,m,chlap
-zapad,m,hrdina
-vychod,m,hrdina
-brusel,m,dub
-oportunista,m,hrdina
-slnieckar,m,chlap
-progresivec,m,chlap
-satanista,m,hrdina
-fasista,m,hrdina
-dennik n,m,nesklonne
-kapitalista,m,hrdina
-zidojaster,m,chlap
-naď,m,chlap
-potkan,m,chlap
-simecka,m,hrdina
-liberalizmus,m,hrdina
-fasizmus,m,dub
-farizej,m,chlap
-oligarcha,m,hrdina
-psychopat,m,chlap
-covid,m,nesklonne
-hrdina,m,hrdina
-saso,m,chlap
-vrchol,m,dub
-rozklad,m,dub
-pokus,m,dub
-propagandista,m,hrdina
-rozum,m,dub
-dzurinda,m,hrdina
-poradca,m,hrdina
-kotlar,m,chlap
+heger,m,chlap,vlastne
+matovic,m,chlap,vlastne
+korcok,m,chlap,vlastne
+lipsic,m,chlap,vlastne
+sulik,m,chlap,vlastne
+soros,m,chlap,vlastne
+gates,m,chlap,vlastne
+harabin,m,chlap,vlastne
+naď,m,chlap,vlastne
+simecka,m,hrdina,vlastne
+dzurinda,m,hrdina,vlastne
+kotlar,m,chlap,vlastne
+
+zapad,m,hrdina,zivotne
+vychod,m,hrdina,zivotne
+brusel,m,dub,zivotne
+vrchol,m,dub,zivotne
+rozklad,m,dub,zivotne
+pokus,m,dub,zivotne
+rozum,m,dub,zivotne
+covid,m,nesklonne,zivotne
+liberalizmus,m,dub,zivotne
+fasizmus,m,dub,zivotne
+dennik n,m,nesklonne,zivotne
+poradca,m,hrdina,zivotne
+
+zidojaster,m,chlap,nezivotne
+kapitalista,m,hrdina,nezivotne
+potkan,m,chlap,nezivotne
+farizej,m,chlap,nezivotne
+oligarcha,m,hrdina,nezivotne
+psychopat,m,chlap,nezivotne
+hrdina,m,hrdina,nezivotne
+saso,m,chlap,nezivotne
+propagandista,m,hrdina,nezivotne
+oportunista,m,hrdina,nezivotne
+slnieckar,m,chlap,nezivotne
+progresivec,m,chlap,nezivotne
+satanista,m,hrdina,nezivotne
+fasista,m,hrdina,nezivotne
 
 europska unia,z,ulica
 markiza,z,zena
@@ -138,6 +141,8 @@ zavrel,zatvara,zatvori,zatvorit,plne,A
 #predlozka
 na
 pred
+a
+s
 
 
 #prislovky

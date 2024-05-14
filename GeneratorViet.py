@@ -57,7 +57,7 @@ class GeneratorViet:
         self._neChance = 0.2
         self._modalChance = 0.3
 
-        self._debug = False
+        self._debug = True
 
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
@@ -99,7 +99,13 @@ class GeneratorViet:
 
                         # call method - create new object 
                         if sd_string == 'podstatne':
-                            obj = method(content=line[0], rod=line[1], vzor=line[2])
+
+                            try:
+                                typ = line[3]  # Trying to access the fourth column
+                                obj = method(content=line[0], rod=line[1], vzor=line[2], typ=line[3])
+                            except IndexError as e:
+                                obj = method(content=line[0], rod=line[1], vzor=line[2])
+
                             self._podstatne.append(obj)
                         
                         elif sd_string == 'pridavne':
@@ -196,15 +202,16 @@ class GeneratorViet:
             podmety[i].transformPrepare(cislo, pad)
 
         privlastky_amount = random.randint(1,3)
+
         if self._debug:
             print(f"privlastky_amount: {privlastky_amount}")
+
         privlastky = self.getPmena(privlastky_amount, 'pridavne')
 
         for i in range(0, privlastky_amount):
             if self._debug:
                 print(f"privlastok sklonovany: {privlastky[i]}")
             privlastky[i].transformPrepare(rod, cislo, pad)
-
 
         return privlastky + podmety
 

@@ -3,7 +3,7 @@ from gramatika.VzorInterface import VzorInterface
 from gramatika.CisloInterface import CisloInterface
 
 class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
-    def __init__(self,content,rod,vzor,special=None, sklonovanie_array=None):
+    def __init__(self,content,rod,vzor,typ=None,special=None, sklonovanie_array=None):
         super().__init__(content)
         VzorInterface.__init__(self)
         CisloInterface.__init__(self)
