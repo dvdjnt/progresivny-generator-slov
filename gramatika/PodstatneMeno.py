@@ -117,7 +117,8 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
     def mesto(self, cislo, pad):
-        sklonovanie_arr = ['o','a','u','o','e','om',
+        lastLetter = self.getContent()[-1:]
+        sklonovanie_arr = [lastLetter, 'a','u','o','e','om',
         'a','i','am','a','ach','ami']
         
         # special case -> miest

@@ -130,8 +130,7 @@ class GeneratorViet:
 
         for i in range(0, sentence_amount):
             podmet_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
-            # prisudok_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
-            prisudok_amount = random.choices([1, 2], weights=[0.0, 0.1], k=1)[0]
+            prisudok_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
             predmet_amount = random.choices([1, 2, 3], weights=[0.5, 0.4, 0.1], k=1)[0]
 
             podmety = self.getPmena(podmet_amount, wordtype='podstatne')
@@ -149,7 +148,6 @@ class GeneratorViet:
         return sentence
 
     def generatePodmetBlock(self, podmety):
-        # TODO predlozka a,s - vycasovat druhy podmet...
 
         rod = podmety[0].getRod()   # rod podla prveho podmetu, dava to zmysel tak
         cislo = 'sg'

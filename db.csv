@@ -100,6 +100,7 @@ mimovladkovy,pekny
 #slovesa
 je,bol,bude,byt,neplne,N
 mal,ma,mat,mat,neplne,A
+zmenil,meni,menit,menit,neplno,G
 
 chcel,chce,chciet,chciet,modal,A
 musel,musi,musiet,musiet,modal,N
@@ -107,10 +108,8 @@ smel,smie,smiet,smiet,modal,N
 mohol,moze,moct,moct,modal,N
 prestal,prestava,prestane,prestat,modal,A
 zacal,zacina,zacne,zacat,modal,A
-prestal,prestava,prestane,prestat,modal,A
 dal,dava,da,dat,modal,A
 sa snazil,sa snazi,sa snazit,sa snazit,modal,A
-zmenil,meni,menit,menit,modal,G
 
 znicil,nici,nicit,nicit,plne,A
 terorizoval,terorizuje,terorizovat,terorizovat,plne,A

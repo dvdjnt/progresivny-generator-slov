@@ -5,6 +5,9 @@
 -vzor
 -special*
 
-### pridat
-gramatika, abstrakcia na bloky, spojky, castice
-custom sklonovanie - centrum, saso
+### pridat 
+- abstrakcia na bloky✅
+- pomnozne podstatne mena
+- spojky, castice
+- a, ale, s
+- custom sklonovanie - centrum, saso
