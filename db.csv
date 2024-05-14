@@ -11,9 +11,10 @@ naď,m,chlap,vlastne
 simecka,m,hrdina,vlastne
 dzurinda,m,hrdina,vlastne
 kotlar,m,chlap,vlastne
+dennik n,m,nesklonne,vlastne
 
-zapad,m,hrdina,zivotne
-vychod,m,hrdina,zivotne
+zapad,m,dub,zivotne
+vychod,m,dub,zivotne
 brusel,m,dub,zivotne
 vrchol,m,dub,zivotne
 rozklad,m,dub,zivotne
@@ -22,7 +23,7 @@ rozum,m,dub,zivotne
 covid,m,nesklonne,zivotne
 liberalizmus,m,dub,zivotne
 fasizmus,m,dub,zivotne
-dennik n,m,nesklonne,zivotne
+
 poradca,m,hrdina,zivotne
 
 zidojaster,m,chlap,nezivotne
@@ -45,7 +46,7 @@ markiza,z,zena
 SASka,z,zena
 vlada,z,zena
 nadvlada,z,zena
-caputova,z,otcov
+caputov,z,otcov
 mimovladka,z,zena
 propaganda,z,zena
 elita,z,zena
@@ -125,7 +126,7 @@ kradol,kradne,ukradne,kradnut,plne,A
 skodil,skodi,skodit,skodit,plne,D
 rozkradol,kradne,ukradne,ukradnut,plne,A
 sterilizoval,sterilizuje,sterilizovat,sterilizovat,plne,A
-pretlacil,tlaci na,tlacit na,tlacit,plne,G
+pretlacil,tlaci,tlacit,tlacit,plne,A
 sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat na,plne,L
 prizivoval,prizivuje,prizivovat,prizivovat,plne,A
 za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,oznacovat za dezolata,plne,A
