@@ -57,6 +57,8 @@ class GeneratorViet:
         self._neChance = 0.2
         self._modalChance = 0.3
 
+        self._debug = False
+
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
         return self._template_arr[random_index]
@@ -73,7 +75,7 @@ class GeneratorViet:
         enum_counter = 0 # used for correct class creation according to _sd_enum
 
         # TODO do buducna - nenaplnat array, iba si vziat pointer na line na file - lepsia memory
-        #
+        # TODO viacero padov pri slovesach
 
         with open ('db.csv', mode ='r', encoding='utf-8') as file:
             csvFile = csv.reader(file)
@@ -121,11 +123,16 @@ class GeneratorViet:
     def generateSentences(self, sentence_amount):
 
         template = str(self.getSentenceTemplate())
-        print(f'sentence template: {template}')
-        print(f'sentence amount: {sentence_amount}\n')
+
+        if self._debug:
+            print(f'sentence template: {template}')
+            print(f'sentence amount: {sentence_amount}\n')
+
         sentence = ''
         paragraph = ''
         # TODO add template
+        # TODO s, ale, a (podmetBlock)
+        # TODO add template blocks (podmetBlock = z templatu = 'poradcovia caputovej')
         # TODO prekopat - keep objects until compilation into string (sentence)
 
 
@@ -133,6 +140,9 @@ class GeneratorViet:
             podmet_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
             prisudok_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
             predmet_amount = random.choices([1, 2, 3], weights=[0.5, 0.4, 0.1], k=1)[0]
+
+            if self._debug:
+                print(f"podmety: {podmet_amount}, prisudky: {prisudok_amount}, predmety: {predmet_amount}")
 
             podmety = self.getPmena(podmet_amount, wordtype='podstatne')
             prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
@@ -142,15 +152,41 @@ class GeneratorViet:
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
             predmetBlock = self.generatePredmetBlock(predmety, prisudky)
 
+
             blocks = podmetBlock + prisudokBlock + predmetBlock
 
             sentence = self.compileSentence(blocks)
 
+            if self._debug:
+                print(sentence + '\n')
+
             paragraph = paragraph + sentence + '.\n'
 
+        print()
         return paragraph
 
+    def compileSentence(self, blocks):
+
+        sentence = ''
+
+        for wordObj in blocks:
+            if self._debug:
+                if isinstance(wordObj, PodstatneMeno):
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRod()}, cislo: {wordObj.getCislo()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
+                elif isinstance(wordObj, PridavneMeno):
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
+                elif isinstance(wordObj, Sloveso):
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, cas: {wordObj.getCasNext()}")
+
+            wordString = wordObj.transform()
+
+            sentence = sentence + wordString + ' '
+
+        return sentence[:-1] # without whitespace at the end
+    
     def generatePodmetBlock(self, podmety):
+        if self._debug:
+            print("generatePodmetBlock podmety".join(f"{podmet.getContent()}" for podmet in podmety))
 
         rod = podmety[0].getRod()   # rod podla prveho podmetu, dava to zmysel tak
         cislo = 'sg'
@@ -160,14 +196,18 @@ class GeneratorViet:
             podmety[i].transformPrepare(cislo, pad)
 
         privlastky_amount = random.randint(1,3)
+        if self._debug:
+            print(f"privlastky_amount: {privlastky_amount}")
         privlastky = self.getPmena(privlastky_amount, 'pridavne')
 
-        for i in range(0, len(privlastky)):
+        for i in range(0, privlastky_amount):
+            if self._debug:
+                print(f"privlastok sklonovany: {privlastky[i]}")
             privlastky[i].transformPrepare(rod, cislo, pad)
 
 
         return privlastky + podmety
-    
+
     def generatePrisudokBlock(self, prisudky, podmety):
         # TODO random cas
         # TODO add prislovky
@@ -215,32 +255,17 @@ class GeneratorViet:
             # casovanie predmetov podla posledneho prisudku vo vete
             predmety[i].transformPrepare('sg',pad)
 
+
         privlastky_amount = random.choices([1, 2, 3], weights=[0.4, 0.3, 0.3], k=1)[0]
+
+        if self._debug:
+            print(f"privlastky_amount: {privlastky_amount}")
         privlastky = self.getPmena(privlastky_amount, 'pridavne')
 
-        for i in range(len(privlastky)):
+        for i in range(privlastky_amount):
             privlastky[i].transformPrepare(rod, cislo, pad)
 
         return privlastky + predmety
-
-    def compileSentence(self, blocks):
-        debug = False
-        sentence = ''
-
-        for wordObj in blocks:
-            if debug:
-                if isinstance(wordObj, PodstatneMeno):
-                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRod()}, cislo: {wordObj.getCislo()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
-                elif isinstance(wordObj, PridavneMeno):
-                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
-                elif isinstance(wordObj, Sloveso):
-                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, cas: {wordObj.getCasNext()}")
-
-            wordString = wordObj.transform()
-
-            sentence = sentence + wordString + ' '
-
-        return sentence[:-1] # without whitespace at the end
 
 
     def getRandomWord(self, data):

@@ -96,7 +96,7 @@ class Sloveso():
             elif lastLetter == 'a':
                 string = slovo + 'ju'
             elif lastLetter == 'e':
-                string = slovo + 'u'
+                string = slovo[:-1] + 'u'
             elif lastLetter == 'i':
                 string = slovo + 'a'
 

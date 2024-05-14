@@ -21,20 +21,21 @@ naď,m,chlap
 potkan,m,chlap
 simecka,m,hrdina
 liberalizmus,m,hrdina
-fasizmus,m,hrdina
+fasizmus,m,dub
 farizej,m,chlap
 oligarcha,m,hrdina
 psychopat,m,chlap
 covid,m,nesklonne
 hrdina,m,hrdina
 saso,m,chlap
-vrchol,m,hrdina
-rozklad,m,hrdina
+vrchol,m,dub
+rozklad,m,dub
 pokus,m,dub
 propagandista,m,hrdina
 rozum,m,dub
-USA,s,nesklonne
-dzurinda,m,chlap
+dzurinda,m,hrdina
+poradca,m,hrdina
+kotlar,m,chlap
 
 europska unia,z,ulica
 markiza,z,zena
@@ -53,18 +54,18 @@ korupcia,z,ulica
 strana,z,zena
 NAKA,z,nesklonne
 politika,z,zena
+komisia,z,ulica
 
 PSko,s,mesto
 hniezdo,s,mesto
 centrum,s,mesto
-pohlavie,s,vysvedcenie
 OLANO,s,mesto
+pohlavie,s,vysvedcenie
 prostredie,s,vysvedcenie
 
 aktuality,z,nesklonne
 72 pohlavi,s,nesklonne
-poradcovia caputovej,m,nesklonne
-poradca,m,hrdina
+USA,s,nesklonne
 
 #pridavne mena (male)
 liberalny,pekny
@@ -94,6 +95,8 @@ zidovsky,pekny
 americky,pekny
 rusky,pekny
 mimovladkovy,pekny
+pro-europsky,pekny
+europsky,pekny
 
 #zamena
 
@@ -120,7 +123,8 @@ skodil,skodi,skodit,skodit,plne,D
 rozkradol,kradne,ukradne,ukradnut,plne,A
 sterilizoval,sterilizuje,sterilizovat,sterilizovat,plne,A
 pretlacil,tlaci na,tlacit na,tlacit,plne,G
-sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat,plne,L
+sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat na,plne,L
+prizivoval,prizivuje,prizivovat,prizivovat,plne,A
 za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,oznacovat za dezolata,plne,A
 opovrhoval,opovrhuje,opovrhovat,opovrhovat,plne,I
 robil,robi,robit,robit,plne,A

@@ -66,17 +66,23 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         return method(cislo, pad)
 
 
-
+    # TODO vzory -> separate class
 
 
     def chlap(self, cislo, pad):
-        sklonovanie_arr = ['','a','ovi','a','ovi','om',
+        lastLetter = self.getContent()[-1:]
+
+        if lastLetter == 'o':   # efektivne odstranime posledne pismeno (šašo -> šaša)
+            lastLetter = ''
+
+        sklonovanie_arr = ['',lastLetter+'a','ovi','a','ovi','om',
                        'i','ov','om','ov','och','mi']
 
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
     
     def hrdina(self, cislo, pad):
-        sklonovanie_arr = ['','u','ovi','u','ovi','om',
+        lastLetter = self.getContent()[-1:]
+        sklonovanie_arr = [lastLetter,'u','ovi','u','ovi','om',
                            'ovia','ov','om','ov','och','ami']
         return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
@@ -131,16 +137,16 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         if debug:
             print(f"word: {self.getContent()}, last letter: {lastLetter}")
 
-        sklonovanie_arr = [lastLetter, 'a','u','o','e','om',
+        sklonovanie_arr = [lastLetter, 'a','u',lastLetter,'e','om',
         'a','i','am','a','ach','ami']
         
-        # special case -> miest
+        # special case genitiv plural
         if pad == 'G' and cislo == 'pl':
             slovo = self.getContent()[:-1]
             char = sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)] 
 
             return self.insertLetterAtIndex(slovo, char, len(slovo)-3)
-        # TODO index sa moze hybat (fasizmus, centrum)
+        # TODO index sa moze hybat (centrum)
 
         return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
