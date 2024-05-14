@@ -10,7 +10,14 @@ from gramatika.Sloveso import Sloveso
 
 class GeneratorViet:
     def __init__(self):
-        self._sd_enum = [ 
+        self._podstatne_vlastne = []
+        self._podstatne_zivotne = []
+        self._podstatne_nezivotne = []
+        self._pridavne = []
+        self._slovesa = []
+        self._slovesa_modal = []
+
+        self._sd_enum = [
             'null',
             'podstatne',    # 1
             'pridavne',     # 2
@@ -22,7 +29,7 @@ class GeneratorViet:
             'spojka',
             'castica',
             'citoslovcia']
-        
+
         self._sd_methods = {
             'podstatne':PodstatneMeno,
             'pridavne':PridavneMeno,
@@ -37,9 +44,11 @@ class GeneratorViet:
         }
 
         self.loadDB()
-        
+
         self._sd_arrays = {
-            'podstatne':self._podstatne,
+            'podstatne_vlastne':self._podstatne_vlastne,
+            'podstatne_zivotne':self._podstatne_zivotne,
+            'podstatne_nezivotne':self._podstatne_nezivotne,
             'pridavne':self._pridavne,
             'zameno':3,
             'sloveso':self._slovesa,
@@ -62,14 +71,11 @@ class GeneratorViet:
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
         return self._template_arr[random_index]
-    
+
     def loadDB(self):
-        
+
         words = []
-        self._podstatne = []
-        self._pridavne = []
-        self._slovesa = []
-        self._slovesa_modal = []
+
 
         i = 1
         enum_counter = 0 # used for correct class creation according to _sd_enum
@@ -91,35 +97,33 @@ class GeneratorViet:
                         if first_line_char == '\n':
                             continue
 
-                        # access string from array through index 
+                        # access string from array through index
                         sd_string = self._sd_enum[enum_counter]
 
                         # access method (slovny druh constructor) through dictionary
                         method = self._sd_methods.get(sd_string)
 
-                        # call method - create new object 
+                        # call method - create new object
                         if sd_string == 'podstatne':
 
                             if len(line) > 3:
                                 obj = method(content=line[0], rod=line[1], vzor=line[2], typ=line[3])
+
+                                if obj.getTyp() == 'zivotne':
+                                    self._podstatne_zivotne.append(obj)
+                                elif obj.getTyp() == 'nezivotne':
+                                    self._podstatne_nezivotne.append(obj)
                             else:
-                                obj = method(content=line[0], rod=line[1], vzor=line[2])
-                            # try:
-                            #     typ = line[3]  # Trying to access the fourth column
-                            #
-                            # except IndexError as e:
-                            #     obj = method(content=line[0], rod=line[1], vzor=line[2])
+                                obj = method(content=line[0], rod=line[1], vzor=line[2], typ='vlastne')
+                                self._podstatne_vlastne.append(obj)
 
-
-                            self._podstatne.append(obj)
-                        
                         elif sd_string == 'pridavne':
                             obj = method(content=line[0], vzor=line[1])
                             self._pridavne.append(obj)
 
                         elif sd_string == 'sloveso':
                             obj = method(content_m=line[0],content_p=line[1],content_b=line[2],content_n=line[3], typ=line[4],pad=line[5])
-                            
+
                             if obj.getTyp() == 'plne':
                                 self._slovesa.append(obj)
                             elif obj.getTyp() == 'modal':
@@ -163,9 +167,9 @@ class GeneratorViet:
                 print(f"podmety: {podmet_amount}, prisudky: {prisudok_amount}, predmety: {predmet_amount}")
 
 
-            podmety = self.getPmena(podmet_amount, wordtype_arr='podstatne')
+            podmety = self.getPmena(podmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
             prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
-            predmety = self.getPmena(predmet_amount, wordtype_arr='podstatne')
+            predmety = self.getPmena(predmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
 
             podmetBlock = self.generatePodmetBlock(podmety)
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
@@ -202,7 +206,7 @@ class GeneratorViet:
             sentence = sentence + wordString + ' '
 
         return sentence[:-1] # without whitespace at the end
-    
+
     def generatePodmetBlock(self, podmety):
 
         block = []
@@ -294,51 +298,51 @@ class GeneratorViet:
 
 
     def getRandomWord(self, data):
-        wordtype = data
+        """
 
-        if isinstance(data, int):
-            wordtype = self._sd_enum[data]
-        elif not isinstance(data, str):
-            raise ValueError("Unsupported data type")
+        :param data: string or string array representation of types of words to generate
+        in case of array, randomly choose type
+        :return: a single word object
+        """
+        if not isinstance(data, str) and not isinstance(data, list):
+            raise ValueError("Unsupported data type in getRandomWord")
 
-        array = self._sd_arrays.get(wordtype)   # get array of words by type
-        random_index = random.randint(0,len(array)-1)
+        if isinstance(data, str):
+            wordtype = data
+        else:
+            wordtype = random.choice(data) # randomly choose one type
+
+        array = self._sd_arrays.get(wordtype)  # get array of words of type
+        random_index = random.randint(0, len(array) - 1)
 
         return array[random_index]
 
     def getPmena(self, word_amount, wordtype_arr):
         """
-        returns amount of podstatne or pridavne mena from given word type array
+        returns amount of podstatne or pridavne mena from given wordtype array
+        array is not processed, but passed to getRandomWord function
         words are unique from each other (no duplicates)
-        :param wordtype_arr (int, str) can be an array, actual type is randomly chosen
+        :param wordtype_arr can be of int, str
         :return array of words (Slovo object)
         """
 
-        if isinstance(wordtype_arr, str) > 1:
-            wordtype = random.choice(wordtype_arr)
-        else:
-            wordtype = wordtype_arr
-
-        # type check
-        if isinstance(wordtype, int):
-            wordtype = self._sd_enum[wordtype]
-        elif not isinstance(wordtype, str):
-            raise ValueError("Unsupported data type")
+        if not isinstance(wordtype_arr, str) and not isinstance(wordtype_arr, list):
+            raise ValueError("Unsupported data type in getRandomWord")
 
         words = []
 
         for i in range(0, word_amount):
 
-            word = self.getRandomWord(wordtype)
+            word = self.getRandomWord(wordtype_arr)
 
             # no duplicates
             while word in words:
-                word = self.getRandomWord(wordtype)
+                word = self.getRandomWord(wordtype_arr)
 
             words.append(word)
 
         return words    # list of words
-    
+
     def getPlnovyznamovePrisudky(self, amount):
         slovesa = []
 
