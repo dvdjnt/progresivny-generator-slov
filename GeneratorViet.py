@@ -171,9 +171,9 @@ class GeneratorViet:
             prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
             predmety = self.getPmena(predmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
 
-            podmetBlock = self.generatePodmetBlock(podmety)
+            podmetBlock = self.generatePBlock(podmety)
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
-            predmetBlock = self.generatePredmetBlock(predmety, prisudky)
+            predmetBlock = self.generatePBlock(predmety, prisudky)
 
 
             blocks = podmetBlock + prisudokBlock + predmetBlock
@@ -199,7 +199,7 @@ class GeneratorViet:
                 elif isinstance(wordObj, PridavneMeno):
                     print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
                 elif isinstance(wordObj, Sloveso):
-                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, cas: {wordObj.getCasNext()}")
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, cas: {wordObj.getCasNext()}, pad: {wordObj.getPad()}")
 
             wordString = wordObj.transform()
 
@@ -207,9 +207,14 @@ class GeneratorViet:
 
         return sentence[:-1] # without whitespace at the end
 
-    def generatePodmetBlock(self, podmety):
+    def generatePBlock(self, podmety, prisudky=None):
 
         block = []
+
+        if prisudky is not None:
+            pad = prisudky[-1].getPad() # predmet
+        else:
+            pad = 'N'   # podmet
 
         # predlozky
         # if (len())
@@ -219,15 +224,20 @@ class GeneratorViet:
 
         for j in range(0,podmety_amount):
             cislo = 'sg'
-            pad = 'N'
             podmety[j].transformPrepare(cislo, pad)
             rod = podmety[j].getRod()
 
-            privlastky_amount = random.randint(1,3)
+            privlastky_amount = random.choices([1, 2, 3], weights=[0.4, 0.4, 0.2], k=1)[0]
 
             # privlastky
-            for i in range(0, privlastky_amount):
+            for i in range(0, privlastky_amount-1):
                 privlastky = self.getPmena(privlastky_amount, 'pridavne')
+                # TODO sklonovanie dub - N
+                # TODO sklonovanie nesklonnych
+
+                vzor = podmety[j].getVzor()
+                if vzor == 'dub' or vzor == 'stroj' or vzor == 'nesklonne':
+                    pad = 'N'
                 privlastky[i].transformPrepare(rod, cislo, pad)
                 block.append(privlastky[i])
 
@@ -273,29 +283,6 @@ class GeneratorViet:
             words.append(prisudky[i])   # to avoid [[<Sloveso>]]
 
         return words
-
-    def generatePredmetBlock(self, predmety, prisudky):
-        rod = predmety[0].getRod()
-        cislo = 'sg'
-        pad = prisudky[-1].getPad()
-
-
-        for i in range(0, len(predmety)):
-            # casovanie predmetov podla posledneho prisudku vo vete
-            predmety[i].transformPrepare('sg',pad)
-
-
-        privlastky_amount = random.choices([1, 2, 3], weights=[0.4, 0.3, 0.3], k=1)[0]
-
-        if self._debug:
-            print(f"privlastky_amount: {privlastky_amount}")
-        privlastky = self.getPmena(privlastky_amount, 'pridavne')
-
-        for i in range(privlastky_amount):
-            privlastky[i].transformPrepare(rod, cislo, pad)
-
-        return privlastky + predmety
-
 
     def getRandomWord(self, data):
         """

@@ -21,8 +21,8 @@ rozklad,m,dub,zivotne
 pokus,m,dub,zivotne
 rozum,m,dub,zivotne
 covid,m,nesklonne,zivotne
-liberalizmus,m,dub,zivotne
-fasizmus,m,dub,zivotne
+liberalizmus,m,liberalizmus,zivotne
+fasizmus,m,liberalizmus,zivotne
 poradca,m,hrdina,zivotne
 
 zidojaster,m,chlap,nezivotne
@@ -106,7 +106,8 @@ europsky,pekny
 #slovesa
 je,bol,bude,byt,neplne,N
 mal,ma,mat,mat,neplne,A
-zmenil,meni,menit,menit,neplno,G
+zmenil,meni,menit,menit,neplne,G
+dovolil,dovoluje,dovoli,dovolit,neplne,A
 
 chcel,chce,chciet,chciet,modal,A
 musel,musi,musiet,musiet,modal,N
@@ -134,7 +135,6 @@ robil,robi,robit,robit,plne,A
 rubal,rube,rubat,rubat,plne,A
 podporil,podporuje,podpori,podporit,plne,A
 podsuval,podsuva,podsunie,podsuvat,plne,A
-dovolil,dovoluje,dovoli,dovolit,plne,A
 zavrel,zatvara,zatvori,zatvorit,plne,A
 
 

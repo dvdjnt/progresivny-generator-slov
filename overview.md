@@ -15,7 +15,10 @@
 - a medzi podmetmi, vyriesit zivotne/nezivotne
   - generatePodmetBlock spolocny pre podmet, predmet
   - nezivotne pouzit ako privlastok, v mnoznom, v prirovnani, nie ako podmet!
-  - prerobit generovanie podmetov -> bez nezivotnych
+  - prerobit nezivotne naming nakolko zensky stredny rod
+  - Sloveso pridat neplnovyznamove medzi arrays
 - prislovky
 - nepriamy privlastok
 - template blocks
+- pomnozne podstatne (aktuality)
+- nesklonne (NAKA)

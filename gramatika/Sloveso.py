@@ -43,7 +43,7 @@ class Sloveso():
         return self._content_p
     
     def getTyp(self):
-        # modal
+        # modal # TODO pridat medzi polia
         # plne
         # neplne
         return self._typ

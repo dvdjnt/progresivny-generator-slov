@@ -11,12 +11,13 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         self._rod = rod
         self._vzor = vzor
         self._cislo = 'sg'  # TODO pomnozne
-        self._typ=typ
+        self._typ=typ   # TODO prerobit naming 'nezivotne' nakolko aj zensky, stredny rod.....!!!! FIXIT FIX
         self._vzor_dict = {
             'chlap':self.chlap,
             'hrdina':self.hrdina,
             'dub':self.dub,
             'stroj':self.stroj,
+            'liberalizmus':self.liberalizmus,
             # kuli
             'zena':self.zena,
             'ulica':self.ulica,
@@ -91,16 +92,29 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         return self.getContent()[:-1]+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
 
     def dub(self, cislo, pad):
+        # podla mna G ma byt 'u'
+
         sklonovanie_arr = ['','a','u','','e','om',
                            'y','ov','om','y','och','mi']
+
+        # TODO exception dubmi / dubami
         
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
-    
+
     def stroj(self, cislo, pad):
         sklonovanie_arr = ['','a','u','','i','om',
                            'e','ov','om','e','och','mi']
         
         return self.getContent()+sklonovanie_arr[self.getCisloCode(cislo)+self.getPadCode(pad)]
+
+    def liberalizmus(self, cislo, pad):
+        lastTwoLetters = self.getContent()[-2:]
+
+        sklonovanie_arr = [lastTwoLetters, 'u', 'u', lastTwoLetters, 'e', 'om',
+                           'y', 'ov', 'om', 'y', 'och', 'mi']
+
+
+        return self.getContent()[:-2] + sklonovanie_arr[self.getCisloCode(cislo) + self.getPadCode(pad)]
 
     def zena(self, cislo,pad):
         sklonovanie_arr = ['a','y','e','u','e','ou',
