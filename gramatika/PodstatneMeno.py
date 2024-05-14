@@ -11,6 +11,7 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         self._rod = rod
         self._vzor = vzor
         self._cislo = 'sg'  # TODO pomnozne
+        self._typ=typ
         self._vzor_dict = {
             'chlap':self.chlap,
             'hrdina':self.hrdina,

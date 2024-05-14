@@ -100,11 +100,16 @@ class GeneratorViet:
                         # call method - create new object 
                         if sd_string == 'podstatne':
 
-                            try:
-                                typ = line[3]  # Trying to access the fourth column
+                            if len(line) > 3:
                                 obj = method(content=line[0], rod=line[1], vzor=line[2], typ=line[3])
-                            except IndexError as e:
+                            else:
                                 obj = method(content=line[0], rod=line[1], vzor=line[2])
+                            # try:
+                            #     typ = line[3]  # Trying to access the fourth column
+                            #
+                            # except IndexError as e:
+                            #     obj = method(content=line[0], rod=line[1], vzor=line[2])
+
 
                             self._podstatne.append(obj)
                         
@@ -127,6 +132,13 @@ class GeneratorViet:
                         i += 1
 
     def generateSentences(self, sentence_amount):
+        """
+        Generates given amount of randomly generated sentences as string. Creates blocks within sentence and
+        then compiles (sklonovanie) the sentences
+
+        :param sentence_amount: amount of sentences to be given
+        :return: paragraph with sentences as string
+        """
 
         template = str(self.getSentenceTemplate())
 
@@ -134,15 +146,15 @@ class GeneratorViet:
             print(f'sentence template: {template}')
             print(f'sentence amount: {sentence_amount}\n')
 
-        sentence = ''
         paragraph = ''
         # TODO add template
         # TODO s, ale, a (podmetBlock)
-        # TODO add template blocks (podmetBlock = z templatu = 'poradcovia caputovej')
-        # TODO prekopat - keep objects until compilation into string (sentence)
+        # TODO add template blocks (podmetBlock = z templatu = 'poradcovia caputovej', 'europska unia)
+        # TODO nepriamy privlastok
 
 
         for i in range(0, sentence_amount):
+            # amount of words
             podmet_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
             prisudok_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
             predmet_amount = random.choices([1, 2, 3], weights=[0.5, 0.4, 0.1], k=1)[0]
@@ -150,9 +162,10 @@ class GeneratorViet:
             if self._debug:
                 print(f"podmety: {podmet_amount}, prisudky: {prisudok_amount}, predmety: {predmet_amount}")
 
-            podmety = self.getPmena(podmet_amount, wordtype='podstatne')
+
+            podmety = self.getPmena(podmet_amount, wordtype_arr='podstatne')
             prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
-            predmety = self.getPmena(predmet_amount, wordtype='podstatne')
+            predmety = self.getPmena(predmet_amount, wordtype_arr='podstatne')
 
             podmetBlock = self.generatePodmetBlock(podmety)
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
@@ -191,29 +204,34 @@ class GeneratorViet:
         return sentence[:-1] # without whitespace at the end
     
     def generatePodmetBlock(self, podmety):
-        if self._debug:
-            print("generatePodmetBlock podmety".join(f"{podmet.getContent()}" for podmet in podmety))
 
-        rod = podmety[0].getRod()   # rod podla prveho podmetu, dava to zmysel tak
-        cislo = 'sg'
-        pad = 'N'
+        block = []
 
-        for i in range(0, len(podmety)):
-            podmety[i].transformPrepare(cislo, pad)
+        # predlozky
+        # if (len())
 
-        privlastky_amount = random.randint(1,3)
+        # podmety
+        podmety_amount = len(podmety)
 
-        if self._debug:
-            print(f"privlastky_amount: {privlastky_amount}")
+        for j in range(0,podmety_amount):
+            cislo = 'sg'
+            pad = 'N'
+            podmety[j].transformPrepare(cislo, pad)
+            rod = podmety[j].getRod()
 
-        privlastky = self.getPmena(privlastky_amount, 'pridavne')
+            privlastky_amount = random.randint(1,3)
 
-        for i in range(0, privlastky_amount):
-            if self._debug:
-                print(f"privlastok sklonovany: {privlastky[i]}")
-            privlastky[i].transformPrepare(rod, cislo, pad)
+            # privlastky
+            for i in range(0, privlastky_amount):
+                privlastky = self.getPmena(privlastky_amount, 'pridavne')
+                privlastky[i].transformPrepare(rod, cislo, pad)
+                block.append(privlastky[i])
 
-        return privlastky + podmety
+            block.append(podmety[j])
+
+
+
+        return block
 
     def generatePrisudokBlock(self, prisudky, podmety):
         # TODO random cas
@@ -288,7 +306,18 @@ class GeneratorViet:
 
         return array[random_index]
 
-    def getPmena(self, word_amount, wordtype):
+    def getPmena(self, word_amount, wordtype_arr):
+        """
+        returns amount of podstatne or pridavne mena from given word type array
+        words are unique from each other (no duplicates)
+        :param wordtype_arr (int, str) can be an array, actual type is randomly chosen
+        :return array of words (Slovo object)
+        """
+
+        if isinstance(wordtype_arr, str) > 1:
+            wordtype = random.choice(wordtype_arr)
+        else:
+            wordtype = wordtype_arr
 
         # type check
         if isinstance(wordtype, int):
