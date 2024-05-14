@@ -118,12 +118,13 @@ class GeneratorViet:
                             break
                         i += 1
 
-    def generateSentence(self, sentence_amount):
+    def generateSentences(self, sentence_amount):
 
         template = str(self.getSentenceTemplate())
         print(f'sentence template: {template}')
         print(f'sentence amount: {sentence_amount}\n')
         sentence = ''
+        paragraph = ''
         # TODO add template
         # TODO prekopat - keep objects until compilation into string (sentence)
 
@@ -145,7 +146,9 @@ class GeneratorViet:
 
             sentence = self.compileSentence(blocks)
 
-        return sentence
+            paragraph = paragraph + sentence + '.\n'
+
+        return paragraph
 
     def generatePodmetBlock(self, podmety):
 
@@ -221,15 +224,23 @@ class GeneratorViet:
         return privlastky + predmety
 
     def compileSentence(self, blocks):
+        debug = False
         sentence = ''
 
         for wordObj in blocks:
-            # if isinstance(wordObj, PodstatneMeno):
+            if debug:
+                if isinstance(wordObj, PodstatneMeno):
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRod()}, cislo: {wordObj.getCislo()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
+                elif isinstance(wordObj, PridavneMeno):
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, pad: {wordObj.getPadNext()}, vzor: {wordObj.getVzor()}")
+                elif isinstance(wordObj, Sloveso):
+                    print(f"word: {wordObj.getContent()}, rod: {wordObj.getRodNext()}, cislo: {wordObj.getCisloNext()}, cas: {wordObj.getCasNext()}")
 
             wordString = wordObj.transform()
+
             sentence = sentence + wordString + ' '
 
-        return sentence
+        return sentence[:-1] # without whitespace at the end
 
 
     def getRandomWord(self, data):

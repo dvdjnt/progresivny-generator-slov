@@ -44,7 +44,14 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
     def getCislo(self):
         return self._cislo
 
-    # def changeCislo(self, cislo):
+    def getVzorMethod(self,vzor):
+        return self._vzor_dict.get(vzor)
+
+    def getPadNext(self):
+        return self._pad_next
+
+    def getCisloNext(self):
+        return self._cislo_next
 
     def transform(self):
         method = self.getVzorMethod(self.getVzor())
@@ -58,8 +65,9 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         method = self.getVzorMethod(self.getVzor())
         return method(cislo, pad)
 
-    def getVzorMethod(self,vzor):
-        return self._vzor_dict.get(vzor)
+
+
+
 
     def chlap(self, cislo, pad):
         sklonovanie_arr = ['','a','ovi','a','ovi','om',
@@ -118,6 +126,11 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
 
     def mesto(self, cislo, pad):
         lastLetter = self.getContent()[-1:]
+
+        debug = False
+        if debug:
+            print(f"word: {self.getContent()}, last letter: {lastLetter}")
+
         sklonovanie_arr = [lastLetter, 'a','u','o','e','om',
         'a','i','am','a','ach','ami']
         

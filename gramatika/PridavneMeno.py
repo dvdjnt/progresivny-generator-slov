@@ -43,6 +43,15 @@ class PridavneMeno(Slovo,VzorInterface, CisloInterface):
             
     def getVzorMethod(self, vzor):
         return self._vzor_dictionary.get(vzor)
+
+    def getRodNext(self):
+        return self._rod_next
+
+    def getCisloNext(self):
+        return self._cislo_next
+
+    def getPadNext(self):
+        return self._pad_next
     
     def pekny(self, rod, cislo, pad):
         # TODO nezivotne    

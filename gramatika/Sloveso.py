@@ -47,6 +47,15 @@ class Sloveso():
         # plne
         # neplne
         return self._typ
+
+    def getRodNext(self):
+        return self._rod_next
+
+    def getCisloNext(self):
+        return self._cislo_next
+
+    def getCasNext(self):
+        return self._cas_next
     
     def fill_sklonovanie_array(self, array):
         self._sklonovanie_array = array
@@ -73,7 +82,7 @@ class Sloveso():
 
     def pritomny(self, rod, cislo):
         string = ''
-        slovo = self._content_p[:-1]
+        slovo = self._content_p
         
         if cislo == 'sg':
             return self._content_p
@@ -103,9 +112,9 @@ class Sloveso():
             return slovo
 
         if cislo == 'sg':
-            string = 'bude '+ slovo
+            string = 'bude ' + slovo
         elif cislo == 'pl':
-            string = 'budu '+ slovo
+            string = 'budu ' + slovo
 
         return string
     

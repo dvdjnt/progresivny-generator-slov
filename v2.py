@@ -1,4 +1,4 @@
 from GeneratorViet import GeneratorViet
 
 gen = GeneratorViet()
-print(gen.generateSentence(10))
+print(gen.generateSentences(10))
