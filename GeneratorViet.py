@@ -21,6 +21,23 @@ class GeneratorViet:
         self._predlozky = []
         self._spojky = []
 
+        self._debug = False
+
+        if self._debug:
+            self._neChance = 0.2
+            self._modalChance = 0.3
+            self._privlastkyChance = [0.1, 0.1, 0.8]
+            self._podmetyChance = [0.5, 0.5]
+            self._prisudkyChance = [0.5, 0.5]
+            self._predmetyChance = [0.3, 0.5, 0.2]
+        else:
+            self._neChance = 0.2
+            self._modalChance = 0.3
+            self._privlastkyChance = [0.3, 0.5, 0.2]
+            self._podmetyChance = [0.5, 0.5]
+            self._prisudkyChance = [0.5, 0.5]
+            self._predmetyChance = [0.3, 0.5, 0.2]
+
         self._sd_enum = [
             'null',
             'podstatne',    # 1
@@ -67,14 +84,7 @@ class GeneratorViet:
 
         self._template_arr = [141, 21421, 2141] # word blocks based on _sd_enum
 
-        self._neChance = 0.2
-        self._modalChance = 0.3
-        self._privlastkyChance = [0.5, 0.3, 0.2]
-        self._podmetyChance = [0.5, 0.5]
-        self._prisudkyChance = [0.4, 0.6]
-        self._predmetyChance = [0.3, 0.5, 0.2]
 
-        self._debug = False
 
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
@@ -91,7 +101,12 @@ class GeneratorViet:
         # TODO do buducna - nenaplnat array, iba si vziat pointer na line na file - lepsia memory
         # TODO viacero padov pri slovesach
 
-        with open ('db.csv', mode ='r', encoding='utf-8') as file:
+        if self._debug:
+            file = 'db_test.csv'
+        else:
+            file = 'db.csv'
+
+        with open (file, mode ='r', encoding='utf-8') as file:
             csvFile = csv.reader(file)
 
             for line in csvFile:
@@ -378,26 +393,25 @@ class GeneratorViet:
     def getPmena(self, word_amount, wordtype_arr):
         """
         returns amount of podstatne or pridavne mena from given wordtype array
-        array is not processed, but passed to getRandomWord function
+        is not processed, but passed to getRandomWord function
         words are unique from each other (no duplicates)
         :param wordtype_arr can be of int, str
         :return array of words (Slovo object)
         """
 
-        if not isinstance(wordtype_arr, str) and not isinstance(wordtype_arr, list):
+        if not isinstance(wordtype_arr, (str, list)):
             raise ValueError("Unsupported data type in getRandomWord")
 
         words = []
 
-        for i in range(0, word_amount):
+        seen = set()  # Set to keep track of the contents we've already added
 
+        while len(words) < word_amount:
             word = self.getRandomWord(wordtype_arr)
-
-            # no duplicates
-            while word in words:
-                word = self.getRandomWord(wordtype_arr)
-
-            words.append(word)
+            content = word.getContent()
+            if content not in seen:
+                seen.add(content)
+                words.append(word)
 
         return words    # list of words
 
