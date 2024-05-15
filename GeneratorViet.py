@@ -1,12 +1,12 @@
 import random
 import csv
-# from gramatika.PodstatneMeno import PodstatneMeno
-# from gramatika.PridavneMeno import PridavneMeno
-# from gramatika.Sloveso import Sloveso
-# from gramatika import * 
 from gramatika.PodstatneMeno import PodstatneMeno
 from gramatika.PridavneMeno import PridavneMeno
+from gramatika.Spojka import Spojka
 from gramatika.Sloveso import Sloveso
+
+from collections import deque
+
 
 class GeneratorViet:
     def __init__(self):
@@ -16,6 +16,9 @@ class GeneratorViet:
         self._pridavne = []
         self._slovesa = []
         self._slovesa_modal = []
+        self._prislovky = []
+        self._predlozky = []
+        self._spojky = []
 
         self._sd_enum = [
             'null',
@@ -38,7 +41,7 @@ class GeneratorViet:
             'cislovka':5,
             'prislovka':6,
             'predlozka':7,
-            'spojka':8,
+            'spojka':Spojka,
             'castica':9,
             'citoslovcia':10
         }
@@ -54,9 +57,9 @@ class GeneratorViet:
             'sloveso':self._slovesa,
             'sloveso_modal':self._slovesa_modal,
             'cislovka':5,
-            'prislovka':6,
-            'predlozka':7,
-            'spojka':8,
+            'prislovka':self._prislovky,
+            'predlozka':self._predlozky,
+            'spojka':self._spojky,
             'castica':9,
             'citoslovcia':10
         }
@@ -65,6 +68,10 @@ class GeneratorViet:
 
         self._neChance = 0.2
         self._modalChance = 0.3
+        self._privlastkyChance = [0.0, 0.0, 1.0]
+        self._podmetyChance = [0.1, 0.9]
+        self._prisudkyChance = [0.5, 0.5]
+        self._predmetyChance = [0.3, 0.5, 0.2]
 
         self._debug = True
 
@@ -129,11 +136,14 @@ class GeneratorViet:
                             elif obj.getTyp() == 'modal':
                                 self._slovesa_modal.append(obj)
 
-                        # words.append(obj)
+                        elif sd_string == 'spojka':
+                            obj = method(content=line[0], vzor=line[1])
+                            self._spojky.append(obj)
 
-                        if i == 150:
-                            break
-                        i += 1
+
+                        # if i == 150:
+                        #     break
+                        # i += 1
 
     def generateSentences(self, sentence_amount):
         """
@@ -159,9 +169,9 @@ class GeneratorViet:
 
         for i in range(0, sentence_amount):
             # amount of words
-            podmet_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
-            prisudok_amount = random.choices([1, 2], weights=[0.8, 0.2], k=1)[0]
-            predmet_amount = random.choices([1, 2, 3], weights=[0.5, 0.4, 0.1], k=1)[0]
+            podmet_amount = random.choices([1, 2], weights=self._podmetyChance, k=1)[0]
+            prisudok_amount = random.choices([1, 2], weights=self._prisudkyChance, k=1)[0]
+            predmet_amount = random.choices([1, 2, 3], weights=self._predmetyChance, k=1)[0]
 
             if self._debug:
                 print(f"podmety: {podmet_amount}, prisudky: {prisudok_amount}, predmety: {predmet_amount}")
@@ -175,10 +185,16 @@ class GeneratorViet:
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
             predmetBlock = self.generatePBlock(predmety, prisudky)
 
+            # TODO convert to linked list?
+            blocks = podmetBlock + prisudokBlock + predmetBlock # TODO based on given template
 
-            blocks = podmetBlock + prisudokBlock + predmetBlock
+            blocks_dll = self.convertToLinkedList(blocks)
 
-            sentence = self.compileSentence(blocks)
+            blocks_dll = self.runSpojky(blocks_dll)
+
+            blocks_arr = self.convertToArray(blocks_dll)
+
+            sentence = self.compileSentence(blocks_arr)
 
             if self._debug:
                 print(sentence + '\n')
@@ -208,7 +224,13 @@ class GeneratorViet:
         return sentence[:-1] # without whitespace at the end
 
     def generatePBlock(self, podmety, prisudky=None):
-
+        """
+        Gerenerates privlastky before each podmet from podmety.
+        Used for podmet and predmet generation.
+        :param podmety: list of podmet objects to generate privlastky for
+        :param prisudky: list of prisudky objects for predmet transformation
+        :return: list of objects - (privlastky + podmety)*
+        """
         block = []
 
         if prisudky is not None:
@@ -216,34 +238,32 @@ class GeneratorViet:
         else:
             pad = 'N'   # podmet
 
-        # predlozky
-        # if (len())
-
         # podmety
         podmety_amount = len(podmety)
 
         for j in range(0,podmety_amount):
-            cislo = 'sg'
-            podmety[j].transformPrepare(cislo, pad)
             rod = podmety[j].getRod()
+            cislo = 'sg'
+            pad_final = pad
+            podmety[j].transformPrepare(cislo, pad)
+            vzor = podmety[j].getVzor()
 
-            privlastky_amount = random.choices([1, 2, 3], weights=[0.4, 0.4, 0.2], k=1)[0]
+            privlastky_amount = random.choices([1, 2, 3], weights=[0.0, 0.0, 1.0], k=1)[0]
+            print(f"privlastky amount: {privlastky_amount}")
 
             # privlastky
-            for i in range(0, privlastky_amount-1):
-                privlastky = self.getPmena(privlastky_amount, 'pridavne')
-                # TODO sklonovanie dub - N
-                # TODO sklonovanie nesklonnych
+            privlastky = self.getPmena(privlastky_amount, 'pridavne')
+            # TODO sklonovanie dub - N
+            # TODO sklonovanie nesklonnych
 
-                vzor = podmety[j].getVzor()
-                if vzor == 'dub' or vzor == 'stroj' or vzor == 'nesklonne':
-                    pad = 'N'
-                privlastky[i].transformPrepare(rod, cislo, pad)
+            if vzor == 'nesklonne' or (pad_final == 'A' and (vzor == 'liberalizmus' or vzor == 'dub' or vzor == 'stroj')) :
+                pad_final = 'N'
+
+            for i in range(0, privlastky_amount):
+                privlastky[i].transformPrepare(rod, cislo, pad_final)
                 block.append(privlastky[i])
 
             block.append(podmety[j])
-
-
 
         return block
 
@@ -267,6 +287,7 @@ class GeneratorViet:
             cas = 'pritomny'
 
             # TODO sloveso-menny prisudok = prisudok + podstatne meno (bude zlodej, meni cloveka)
+            # TODO add negativeChance
 
             # modal chance
             if self.chance(self._modalChance):
@@ -283,6 +304,52 @@ class GeneratorViet:
             words.append(prisudky[i])   # to avoid [[<Sloveso>]]
 
         return words
+
+    def convertToLinkedList(self, arr):
+        llist = deque()
+
+        for element in arr:
+            llist.append(element)
+
+        return llist
+
+    def convertToArray(self, list):
+        arr = []
+        for node in list:
+            arr.append(node)
+
+        return arr
+
+    def runSpojky(self, blocks_dll):
+        indices = []
+
+        for i in range(0, len(blocks_dll)-1):
+            podm1 = isinstance(blocks_dll[i], PodstatneMeno) and isinstance(blocks_dll[i+1], PodstatneMeno)
+            podm2 = isinstance(blocks_dll[i], PodstatneMeno) and isinstance(blocks_dll[i+1], PridavneMeno)
+            if podm1 or podm2:
+                # blocks_dll.insert(i, self.getRandomWord('spojka'))
+                indices.append(i)
+            # print(blocks_dll[i])
+
+        total = 0
+
+        for index in indices:
+            blocks_dll.insert(index+1+total, self.getRandomWord('spojka'))
+
+            # indices shift because of inserting
+            total += 1
+
+
+
+
+
+
+        # for block in blocks_dll:
+        #     print(block)
+        #     if isinstance(block, PodstatneMeno) and isinstance(block.next, PodstatneMeno):
+        #         blocks_dll.insert(block, self.getRandomWord('predlozka'))
+
+        return blocks_dll
 
     def getRandomWord(self, data):
         """

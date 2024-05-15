@@ -108,6 +108,8 @@ je,bol,bude,byt,neplne,N
 mal,ma,mat,mat,neplne,A
 zmenil,meni,menit,menit,neplne,G
 dovolil,dovoluje,dovoli,dovolit,neplne,A
+podsuval,podsuva,podsunie,podsuvat,neplne,A
+sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat na,neplne,L
 
 chcel,chce,chciet,chciet,modal,A
 musel,musi,musiet,musiet,modal,N
@@ -127,25 +129,17 @@ skodil,skodi,skodit,skodit,plne,D
 rozkradol,kradne,ukradne,ukradnut,plne,A
 sterilizoval,sterilizuje,sterilizovat,sterilizovat,plne,A
 pretlacil,tlaci,tlacit,tlacit,plne,A
-sa prizivoval na,sa prizivuje na,sa prizivovat na,sa prizivovat na,plne,L
 prizivoval,prizivuje,prizivovat,prizivovat,plne,A
 za dezolata oznacil,za dezolata oznacuje,za dezolata oznaci,oznacovat za dezolata,plne,A
 opovrhoval,opovrhuje,opovrhovat,opovrhovat,plne,I
 robil,robi,robit,robit,plne,A
 rubal,rube,rubat,rubat,plne,A
 podporil,podporuje,podpori,podporit,plne,A
-podsuval,podsuva,podsunie,podsuvat,plne,A
 zavrel,zatvara,zatvori,zatvorit,plne,A
 
+#cislovka
 
-#predlozka
-na
-pred
-a
-s
-
-
-#prislovky
+#prislovky - spajaju prisudky
 pomaly
 rychlo
 v skratenom legislativnom konani
@@ -165,17 +159,37 @@ farizejsky
 bezhlavo
 bez problemov
 
+#predlozka
+z,G
+bez,G
+miesto,G
+mimo,G
+od,G
+spomedzi,G
+k,D
+kvoli,D
+napriek,D
+proti,D
+voci,D
+cez,A
+medzi,A
+na,A
+pred,A
+pre,A
+o,A
+po,A
+na,L
+o,L
+po,L
+popri,L
+s,I
 
 
-#spojky
+#spojky - spajaju podmety + predmety
+a,N
+aj,N
 
-#castice
-
-
-
-
-
-
+#castice - spajaju vety
 
 
 
@@ -186,3 +200,5 @@ podla obrazu
 podla
 ale aj
 ako
+
+#citoslovcia

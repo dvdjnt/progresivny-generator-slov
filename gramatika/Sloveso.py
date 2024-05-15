@@ -19,6 +19,8 @@ class Sloveso():
         self._rod_next = 'm'
         self._cislo_next = 'sg'
 
+        # TODO add negativeChance
+
     def transform(self):
         method = self.getCasMethod(self._cas_next)
         return method(self._rod_next, self._cislo_next)
