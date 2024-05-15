@@ -1,3 +1,4 @@
+import copy
 import random
 import csv
 from gramatika.PodstatneMeno import PodstatneMeno
@@ -68,12 +69,12 @@ class GeneratorViet:
 
         self._neChance = 0.2
         self._modalChance = 0.3
-        self._privlastkyChance = [0.0, 0.0, 1.0]
-        self._podmetyChance = [0.1, 0.9]
-        self._prisudkyChance = [0.5, 0.5]
+        self._privlastkyChance = [0.5, 0.3, 0.2]
+        self._podmetyChance = [0.5, 0.5]
+        self._prisudkyChance = [0.4, 0.6]
         self._predmetyChance = [0.3, 0.5, 0.2]
 
-        self._debug = True
+        self._debug = False
 
     def getSentenceTemplate(self):
         random_index = random.randint(0,len(self._template_arr)-1)
@@ -249,7 +250,6 @@ class GeneratorViet:
             vzor = podmety[j].getVzor()
 
             privlastky_amount = random.choices([1, 2, 3], weights=[0.0, 0.0, 1.0], k=1)[0]
-            print(f"privlastky amount: {privlastky_amount}")
 
             # privlastky
             privlastky = self.getPmena(privlastky_amount, 'pridavne')
@@ -369,7 +369,11 @@ class GeneratorViet:
         array = self._sd_arrays.get(wordtype)  # get array of words of type
         random_index = random.randint(0, len(array) - 1)
 
-        return array[random_index]
+        obj = array[random_index]
+
+        obj_copy = copy.deepcopy(obj)
+
+        return obj_copy
 
     def getPmena(self, word_amount, wordtype_arr):
         """

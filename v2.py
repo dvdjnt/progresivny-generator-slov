@@ -1,8 +1,8 @@
 from GeneratorViet import GeneratorViet
 
-gen = GeneratorViet()
-sen = gen.generateSentences(10)
+userinput = input("pocet viet: ")
 
-username = input('sa zebudz ty baklazan')
+gen = GeneratorViet()
+sen = gen.generateSentences(int(userinput))
 
 print(sen)
