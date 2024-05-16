@@ -140,7 +140,7 @@ zavrel,zatvara,zatvori,zatvorit,plne,A
 
 #cislovka
 
-#prislovky - spajaju prisudky
+#prislovky - spajaju prisudky (slovesa)
 pomaly
 rychlo
 v skratenom legislativnom konani
@@ -190,6 +190,7 @@ s,I
 a,N
 aj,N
 s,I
+
 #castice - spajaju vety
 
 

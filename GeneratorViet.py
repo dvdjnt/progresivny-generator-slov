@@ -5,6 +5,7 @@ from gramatika.PodstatneMeno import PodstatneMeno
 from gramatika.PridavneMeno import PridavneMeno
 from gramatika.Spojka import Spojka
 from gramatika.Sloveso import Sloveso
+from gramatika.Prislovka import Prislovka
 
 from collections import deque
 
@@ -26,18 +27,23 @@ class GeneratorViet:
         if self._debug:
             self._neChance = 0.2
             self._modalChance = 0.3
-            self._privlastkyChance = [0.1, 0.1, 0.8]
-            self._podmetyChance = [0.1, 0.9]
-            self._prisudkyChance = [0.1, 0.9]
-            self._predmetyChance = [0.3, 0.5, 0.2]
+
+            self._podmetyWeight = [0.1, 0.9]
+            self._prisudkyWeight = [0.1, 0.9]
+            self._predmetyWeight = [0.3, 0.5, 0.2]
+
+            self._privlastkyWeight = [0.1, 0.1, 0.8]
+            self._prislovkyWeight = [0.1, 0.9]
         else:
             self._neChance = 0.2
             self._modalChance = 0.3
-            self._privlastkyChance = [0.3, 0.5, 0.2]
-            self._podmetyChance = [0.5, 0.5]
-            self._prisudkyChance = [0.5, 0.5]
-            self._predmetyChance = [0.3, 0.5, 0.2]
 
+            self._podmetyWeight = [0.5, 0.5]
+            self._prisudkyWeight = [0.5, 0.5]
+            self._predmetyWeight = [0.3, 0.5, 0.2]
+
+            self._privlastkyWeight = [0.3, 0.5, 0.2]
+            self._prislovkyWeight = [0.6, 0.4]
         self._sd_enum = [
             'null',
             'podstatne',    # 1
@@ -57,7 +63,7 @@ class GeneratorViet:
             'zameno':3,
             'sloveso':Sloveso,
             'cislovka':5,
-            'prislovka':6,
+            'prislovka':Prislovka,
             'predlozka':7,
             'spojka':Spojka,
             'castica':9,
@@ -156,10 +162,12 @@ class GeneratorViet:
                             obj = method(content=line[0], pad=line[1])
                             self._spojky.append(obj)
 
+                        elif sd_string == 'prislovka':
+                            obj = method(content=line[0])
+                            self._prislovky.append(obj)
 
-                        # if i == 150:
-                        #     break
-                        # i += 1
+                        # TODO optimize appending
+
 
     def generateSentences(self, sentence_amount):
         """
@@ -185,23 +193,26 @@ class GeneratorViet:
 
         for i in range(0, sentence_amount):
             # amount of words
-            podmet_amount = random.choices([1, 2], weights=self._podmetyChance, k=1)[0]
-            prisudok_amount = random.choices([1, 2], weights=self._prisudkyChance, k=1)[0]
-            predmet_amount = random.choices([1, 2, 3], weights=self._predmetyChance, k=1)[0]
+            podmet_amount = random.choices([1, 2], weights=self._podmetyWeight, k=1)[0]
+            prisudok_amount = random.choices([1, 2], weights=self._prisudkyWeight, k=1)[0]
+            predmet_amount = random.choices([1, 2, 3], weights=self._predmetyWeight, k=1)[0]
 
             if self._debug:
                 print(f"podmety: {podmet_amount}, prisudky: {prisudok_amount}, predmety: {predmet_amount}")
 
 
-            podmety = self.getPmena(podmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
+            podmety = self.getWords(podmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
             prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
-            predmety = self.getPmena(predmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
+            predmety = self.getWords(predmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
 
 
             podmetBlock = self.generatePBlock(podmety)
             podmetBlock = self.fillInSpojky(podmetBlock) # TODO sklonovanie 's'
-            podmetBlock = self.fillInPrivlastky(podmetBlock)
+            podmetBlock = self.fillInPrivlastky(podmetBlock, self._privlastkyWeight)
+
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
+            prisudokBlock = self.fillInPrislovky(prisudokBlock, self._prislovkyWeight)
+
             predmetBlock = self.generatePBlock(predmety, prisudky)
 
             # TODO privlastky self.fillInPrivlastky()
@@ -312,7 +323,7 @@ class GeneratorViet:
 
             # modal chance
             if self.chance(self._modalChance):
-                modal_sloveso = self.getRandomWord('sloveso_modal')
+                modal_sloveso = self.getRandomWord('sloveso_modal') # TODO getWord lebo sa opakuju
                 modal_sloveso.transformPrepare(cas, rod, cislo)
                 # modal_sloveso = self.negativeChance(modal_sloveso)
                 cas = 'neurcity'
@@ -340,6 +351,69 @@ class GeneratorViet:
             arr.append(node)
 
         return arr
+
+    def fillInPrivlastky(self, words, weight):
+        """
+        Iterates over given words array, and generates a number of PridavneMeno objects
+        for each PodstatneMeno. Generated objects are places in front of existing objects
+        in the returned array.
+        :param weight: chance vector for generating privlastky
+        :param words: array of objects, ignores all but PodstatneMeno
+        :return: array with added PridavneMeno objects placed in front of existing PodstatneMeno objects
+        """
+
+        return_arr = []
+
+        for i in range(0, len(words)):
+            if not isinstance(words[i], PodstatneMeno):
+                return_arr.append(words[i])
+                continue
+
+            privlastky_block = []
+
+            # get RCPV
+            rod = words[i].getRod()
+            cislo = 'sg'
+            pad = words[i].getPadNext()
+            vzor = words[i].getVzor()
+
+            if vzor == 'nesklonne' or (
+                    pad == 'A' and (vzor == 'liberalizmus' or vzor == 'dub' or vzor == 'stroj')):
+                pad = 'N'
+
+            # privlastky
+            privlastky_amount = random.choices([1, 2, 3], weights=weight, k=1)[0] # non-zero
+            privlastky = self.getWords(privlastky_amount, 'pridavne')
+
+            for j in range(0, privlastky_amount):
+                privlastky[j].transformPrepare(rod, cislo, pad)
+                # privlastky_block.append(privlastky[j])
+                return_arr.append(privlastky[j])
+
+            return_arr.append(words[i])
+
+        return return_arr
+
+    def fillInPrislovky(self, words, weight):
+        return_arr = []
+        last_index = len(words)-1 # because for loop i-1 because looking for next element crash
+        # print(words)
+
+        i = 0
+        for i in range(0, len(words)-1):
+            if isinstance(words[i], Sloveso) and isinstance(words[i+1], Sloveso):
+                prislovky_amount = random.choices([1, 2], weights=weight, k=1)[0]
+                prislovky = self.getWords(prislovky_amount, 'prislovka')
+
+                for j in range(0, prislovky_amount):
+                    # prislovky[j].transformPrepare()
+                    return_arr.append(prislovky[j])
+
+            return_arr.append(words[i])
+
+        return_arr.append(words[last_index])
+
+        return return_arr
 
     def fillInSpojky(self, blocks_list):
         """
@@ -394,11 +468,12 @@ class GeneratorViet:
 
         return obj_copy
 
-    def getPmena(self, word_amount, wordtype_arr):
+    def getWords(self, word_amount, wordtype_arr):
         """
         Returns amount of podstatne or pridavne mena from given wordtype array,
         array is not processed, but passed to getRandomWord function.
         Returned words are unique from each other (no duplicates).
+        :param word_amount: amount of words to generate
         :param wordtype_arr of int, str
         :return array of words (Slovo object)
         """
@@ -420,6 +495,7 @@ class GeneratorViet:
         return words    # list of words
 
     def getPlnovyznamovePrisudky(self, amount):
+        # TODO optimize with getWords
         slovesa = []
 
         for i in range(0, amount):
@@ -431,47 +507,6 @@ class GeneratorViet:
             slovesa.append(randomSloveso)
 
         return slovesa  # list of words
-
-    def fillInPrivlastky(self, words):
-        """
-        Iterates over given words array, and generates a number of PridavneMeno objects
-        for each PodstatneMeno. Generated objects are places in front of existing objects
-        in the returned array.
-        :param words: array of objects, ignores all but PodstatneMeno
-        :return: array with added PridavneMeno objects placed in front of existing PodstatneMeno objects
-        """
-
-        return_arr = []
-
-        for i in range(0, len(words)):
-            if not isinstance(words[i], PodstatneMeno):
-                return_arr.append(words[i])
-                continue
-
-            privlastky_block = []
-
-            # get RCPV
-            rod = words[i].getRod()
-            cislo = 'sg'
-            pad = words[i].getPadNext()
-            vzor = words[i].getVzor()
-
-            if vzor == 'nesklonne' or (
-                    pad == 'A' and (vzor == 'liberalizmus' or vzor == 'dub' or vzor == 'stroj')):
-                pad = 'N'
-
-            # privlastky
-            privlastky_amount = random.choices([1, 2, 3], weights=[0.0, 0.0, 1.0], k=1)[0] # non-zero
-            privlastky = self.getPmena(privlastky_amount, 'pridavne')
-
-            for j in range(0, privlastky_amount):
-                privlastky[j].transformPrepare(rod, cislo, pad)
-                # privlastky_block.append(privlastky[j])
-                return_arr.append(privlastky[j])
-
-            return_arr.append(words[i])
-
-        return return_arr
 
     def negativeChance(self, string):
         if self.chance(self._neChance):
