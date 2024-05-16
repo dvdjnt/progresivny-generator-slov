@@ -62,7 +62,12 @@ class PodstatneMeno(Slovo, VzorInterface,CisloInterface):
         method = self.getVzorMethod(self.getVzor())
         return method(self._cislo_next, self._pad_next)
 
-    def transformPrepare(self, cislo, pad):
+    def transformPrepare(self, cislo=None, pad=None):
+        if cislo is None:
+            cislo = self._cislo_next
+        if pad is None:
+            pad = self._pad_next
+
         self._cislo_next = cislo
         self._pad_next = pad
 

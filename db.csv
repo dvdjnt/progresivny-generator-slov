@@ -100,6 +100,7 @@ rusky,pekny
 mimovladkovy,pekny
 pro-europsky,pekny
 europsky,pekny
+britsky,pekny
 
 #zamena
 
@@ -188,7 +189,7 @@ s,I
 #spojky - spajaju podmety + predmety
 a,N
 aj,N
-
+s,I
 #castice - spajaju vety
 
 

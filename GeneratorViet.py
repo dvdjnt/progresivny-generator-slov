@@ -27,8 +27,8 @@ class GeneratorViet:
             self._neChance = 0.2
             self._modalChance = 0.3
             self._privlastkyChance = [0.1, 0.1, 0.8]
-            self._podmetyChance = [0.5, 0.5]
-            self._prisudkyChance = [0.5, 0.5]
+            self._podmetyChance = [0.1, 0.9]
+            self._prisudkyChance = [0.1, 0.9]
             self._predmetyChance = [0.3, 0.5, 0.2]
         else:
             self._neChance = 0.2
@@ -153,7 +153,7 @@ class GeneratorViet:
                                 self._slovesa_modal.append(obj)
 
                         elif sd_string == 'spojka':
-                            obj = method(content=line[0], vzor=line[1])
+                            obj = method(content=line[0], pad=line[1])
                             self._spojky.append(obj)
 
 
@@ -197,17 +197,19 @@ class GeneratorViet:
             prisudky = self.getPlnovyznamovePrisudky(prisudok_amount)
             predmety = self.getPmena(predmet_amount, wordtype_arr=['podstatne_vlastne', 'podstatne_zivotne'])
 
+
             podmetBlock = self.generatePBlock(podmety)
+            podmetBlock = self.fillInSpojky(podmetBlock) # TODO sklonovanie 's'
+            podmetBlock = self.fillInPrivlastky(podmetBlock)
             prisudokBlock = self.generatePrisudokBlock(prisudky, podmety)
             predmetBlock = self.generatePBlock(predmety, prisudky)
 
-            # TODO convert to linked list?
+            # TODO privlastky self.fillInPrivlastky()
+
             blocks = podmetBlock + prisudokBlock + predmetBlock # TODO based on given template
 
             blocks_dll = self.convertToLinkedList(blocks)
-
-            blocks_dll = self.runSpojky(blocks_dll)
-
+            blocks_dll = self.fillInSpojky(blocks_dll)
             blocks_arr = self.convertToArray(blocks_dll)
 
             sentence = self.compileSentence(blocks_arr)
@@ -247,6 +249,10 @@ class GeneratorViet:
         :param prisudky: list of prisudky objects for predmet transformation
         :return: list of objects - (privlastky + podmety)*
         """
+
+        # TODO nastavit podmety, rody....
+
+
         block = []
 
         if prisudky is not None:
@@ -262,21 +268,21 @@ class GeneratorViet:
             cislo = 'sg'
             pad_final = pad
             podmety[j].transformPrepare(cislo, pad)
-            vzor = podmety[j].getVzor()
-
-            privlastky_amount = random.choices([1, 2, 3], weights=[0.0, 0.0, 1.0], k=1)[0]
-
-            # privlastky
-            privlastky = self.getPmena(privlastky_amount, 'pridavne')
-            # TODO sklonovanie dub - N
-            # TODO sklonovanie nesklonnych
-
-            if vzor == 'nesklonne' or (pad_final == 'A' and (vzor == 'liberalizmus' or vzor == 'dub' or vzor == 'stroj')) :
-                pad_final = 'N'
-
-            for i in range(0, privlastky_amount):
-                privlastky[i].transformPrepare(rod, cislo, pad_final)
-                block.append(privlastky[i])
+            # vzor = podmety[j].getVzor()
+            #
+            # privlastky_amount = random.choices([1, 2, 3], weights=[0.0, 0.0, 1.0], k=1)[0]
+            #
+            # # privlastky
+            # privlastky = self.getPmena(privlastky_amount, 'pridavne')
+            # # TODO sklonovanie dub - N
+            # # TODO sklonovanie nesklonnych
+            #
+            # if vzor == 'nesklonne' or (pad_final == 'A' and (vzor == 'liberalizmus' or vzor == 'dub' or vzor == 'stroj')) :
+            #     pad_final = 'N'
+            #
+            # for i in range(0, privlastky_amount):
+            #     privlastky[i].transformPrepare(rod, cislo, pad_final)
+            #     block.append(privlastky[i])
 
             block.append(podmety[j])
 
@@ -335,36 +341,34 @@ class GeneratorViet:
 
         return arr
 
-    def runSpojky(self, blocks_dll):
+    def fillInSpojky(self, blocks_list):
+        """
+        Inserts a Spojka object between two PodstatneMeno objects
+        or between PodstatneMeno and PridavneMeno objects in given list.
+
+        :param blocks_list: linked list of objects
+        :return:
+        """
         indices = []
 
-        for i in range(0, len(blocks_dll)-1):
-            podm1 = isinstance(blocks_dll[i], PodstatneMeno) and isinstance(blocks_dll[i+1], PodstatneMeno)
-            podm2 = isinstance(blocks_dll[i], PodstatneMeno) and isinstance(blocks_dll[i+1], PridavneMeno)
+        for i in range(0, len(blocks_list) - 1):
+            podm1 = isinstance(blocks_list[i], PodstatneMeno) and isinstance(blocks_list[i + 1], PodstatneMeno)
+            podm2 = isinstance(blocks_list[i], PodstatneMeno) and isinstance(blocks_list[i + 1], PridavneMeno)
             if podm1 or podm2:
-                # blocks_dll.insert(i, self.getRandomWord('spojka'))
                 indices.append(i)
-            # print(blocks_dll[i])
 
         total = 0
 
         for index in indices:
-            blocks_dll.insert(index+1+total, self.getRandomWord('spojka'))
+            spojka = self.getRandomWord('spojka')
+            blocks_list[index + 1 + total].transformPrepare(None, spojka.getPad())
+            # blocks_list[index + 1 + total].
+            blocks_list.insert(index + 1 + total, spojka)
 
             # indices shift because of inserting
             total += 1
 
-
-
-
-
-
-        # for block in blocks_dll:
-        #     print(block)
-        #     if isinstance(block, PodstatneMeno) and isinstance(block.next, PodstatneMeno):
-        #         blocks_dll.insert(block, self.getRandomWord('predlozka'))
-
-        return blocks_dll
+        return blocks_list
 
     def getRandomWord(self, data):
         """
@@ -392,10 +396,10 @@ class GeneratorViet:
 
     def getPmena(self, word_amount, wordtype_arr):
         """
-        returns amount of podstatne or pridavne mena from given wordtype array
-        is not processed, but passed to getRandomWord function
-        words are unique from each other (no duplicates)
-        :param wordtype_arr can be of int, str
+        Returns amount of podstatne or pridavne mena from given wordtype array,
+        array is not processed, but passed to getRandomWord function.
+        Returned words are unique from each other (no duplicates).
+        :param wordtype_arr of int, str
         :return array of words (Slovo object)
         """
 
@@ -427,6 +431,47 @@ class GeneratorViet:
             slovesa.append(randomSloveso)
 
         return slovesa  # list of words
+
+    def fillInPrivlastky(self, words):
+        """
+        Iterates over given words array, and generates a number of PridavneMeno objects
+        for each PodstatneMeno. Generated objects are places in front of existing objects
+        in the returned array.
+        :param words: array of objects, ignores all but PodstatneMeno
+        :return: array with added PridavneMeno objects placed in front of existing PodstatneMeno objects
+        """
+
+        return_arr = []
+
+        for i in range(0, len(words)):
+            if not isinstance(words[i], PodstatneMeno):
+                return_arr.append(words[i])
+                continue
+
+            privlastky_block = []
+
+            # get RCPV
+            rod = words[i].getRod()
+            cislo = 'sg'
+            pad = words[i].getPadNext()
+            vzor = words[i].getVzor()
+
+            if vzor == 'nesklonne' or (
+                    pad == 'A' and (vzor == 'liberalizmus' or vzor == 'dub' or vzor == 'stroj')):
+                pad = 'N'
+
+            # privlastky
+            privlastky_amount = random.choices([1, 2, 3], weights=[0.0, 0.0, 1.0], k=1)[0] # non-zero
+            privlastky = self.getPmena(privlastky_amount, 'pridavne')
+
+            for j in range(0, privlastky_amount):
+                privlastky[j].transformPrepare(rod, cislo, pad)
+                # privlastky_block.append(privlastky[j])
+                return_arr.append(privlastky[j])
+
+            return_arr.append(words[i])
+
+        return return_arr
 
     def negativeChance(self, string):
         if self.chance(self._neChance):
