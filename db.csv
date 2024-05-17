@@ -100,6 +100,7 @@ rusky,pekny
 mimovladkovy,pekny
 pro-europsky,pekny
 europsky,pekny
+britsky,pekny
 
 #zamena
 
@@ -139,7 +140,7 @@ zavrel,zatvara,zatvori,zatvorit,plne,A
 
 #cislovka
 
-#prislovky - spajaju prisudky
+#prislovky - spajaju prisudky (slovesa)
 pomaly
 rychlo
 v skratenom legislativnom konani
@@ -188,6 +189,7 @@ s,I
 #spojky - spajaju podmety + predmety
 a,N
 aj,N
+s,I
 
 #castice - spajaju vety
 
